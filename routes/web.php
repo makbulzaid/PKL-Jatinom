@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\profileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,44 +16,30 @@ use App\Http\Controllers\profileController;
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
-})->name('home')->middleware('auth');
+// Route::get('/', function () {
+//     return view('employee');
+// });
 
-Route::get('/', [profileController::class,'beranda'])->name('beranda');
+Route::get('/', function(){
+    return redirect('/employee');
+})->middleware('auth');
 
-//office
-Route::get('/office', [profileController::class,'office']);
-Route::get('/tambah-office', [profileController::class,'store_office']);
-Route::post('/simpan-office', [profileController::class,'store_office'])->name('simpan');
-Route::match(['get', 'post'], '/edit/{id_office}', [profileController::class,'edit_office']);
-Route::delete('/office/{id_office}',[profileController::class,'destroy_office']);
+Route::put('/employee/keluar/{nomor_induk}', [EmployeeController::class, 'keluar'])->middleware('auth');
+Route::resource('/employee', EmployeeController::class)->scoped(['employee' => 'nomor_induk'])->middleware('auth');
 
-Route::get('/fmjimbe', [profileController::class,'fmjimbe']);
-Route::get('/fmjatinom', [profileController::class,'fmjatinom']);
-Route::get('/gpsjimbe', [profileController::class,'gpsjimbe']);
-Route::get('/gpspikatan', [profileController::class,'gpspikatan']);
-Route::get('/gpsponggok', [profileController::class,'gpsponggok']);
-Route::get('/psinduk', [profileController::class,'induk']);
-Route::get('/psbali', [profileController::class,'psbali']);
-Route::get('/psponorogo', [profileController::class,'psponorogo']);
-Route::get('/pspikatan', [profileController::class,'pspikatan']);
-Route::get('/pstrisula', [profileController::class,'pstrisula']);
-Route::get('/psgading', [profileController::class,'psgading']);
-Route::get('/pssidorejo', [profileController::class,'pssidorejo']);
-Route::get('/psamphibi', [profileController::class,'psamphibi']);
-Route::get('/psrejotangan', [profileController::class,'psrejotangan']);
-Route::get('/psponggok', [profileController::class,'psponggok']);
-Route::get('/psbinter', [profileController::class,'psbintang']);
-Route::get('/pspare', [profileController::class,'pspare']);
-Route::get('/psaulia', [profileController::class,'psaulia']);
-Route::get('/jfblitar', [profileController::class,'jfblitar']);
-Route::get('/jfmadiun', [profileController::class,'jfmadiun']);
-Route::get('/divkend', [profileController::class,'divkend']);
-Route::get('/rpa', [profileController::class,'rpa']);
+Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
+Route::post('/register', [RegisterController::class, 'store']);
 
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [LoginController::class, 'authenticate']);
+Route::post('/logout', [LoginController::class, 'logout']);
 
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::resource('/employee/{company:slug_company}', EmployeeController::class);
+// Route::resource('/Karyawan/JIF', EmployeeController::class);
+// Route::resource('/Karyawan/JIG', EmployeeController::class);
+// Route::resource('/Karyawan/JIA', EmployeeController::class);
+// Route::resource('/Karyawan/SAM', EmployeeController::class);
+// Route::resource('/Karyawan/LSL', EmployeeController::class);
+// Route::resource('/Karyawan/JPR', EmployeeController::class);
+// Route::resource('/Karyawan/SPM', EmployeeController::class);
+// Route::resource('/Karyawan/SGI', EmployeeController::class);

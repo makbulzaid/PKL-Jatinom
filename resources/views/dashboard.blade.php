@@ -1,21 +1,23 @@
-@extends('index')
+@extends('layouts.main')
 
-
-@section('home')
-    class=active
-@endsection
-
-@section('judul')
-    Selamat Datang!
-@endsection
-
-@section('content')
-
-<div id="flash-data" class="alert alert-info alert-dismissible fade show" role="alert">
-    Welcome back, <strong>{{ (Auth::user()->name) }}</strong>! 
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-
+@section('container')
+    <div class="table-responsive">
+        <table class="table table-striped table-md">
+            <tr>
+                <th>#</th>
+                <th>Nama</th>
+                <th>NIK</th>
+                <th>Tempat</th>
+                <th>Tanggal Lahir</th>
+                <th>Bagian</th>
+                <th>Kantor</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Irwansyah Saputra</td>
+                <td>0123456789</td>
+            </tr>
+        </table>
+    </div>
 @endsection
