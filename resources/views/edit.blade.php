@@ -45,7 +45,7 @@
                                     <input name="tempat_lahir" id="tempat_lahir" type="text" class="form-control" value="{{ old('tempat_lahir', $employees->tempat_lahir) }}" required autofocus>
                                     
                                     <label class="mt-2" for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input name="tanggal_lahir" id="tanggal_lahir" type="date" class="form-control" value="{{ old($employees->tanggal_lahir) }}" required autofocus>
+                                    <input name="tanggal_lahir" id="tanggal_lahir" type="date" class="form-control" value="{{ old('tanggal_lahir', $employees->tanggal_lahir) }}" required autofocus>
                                     
                                     <label class="mt-2" for="alamat">Alamat</label>
                                     <input name="alamat" id="alamat" type="text" class="form-control" value="{{ old('alamat', $employees->alamat) }}" required autofocus>
@@ -92,12 +92,12 @@
                                     <label class="mt-2" for="tanggal_masuk">Tanggal Masuk</label>
                                     <input name="tanggal_masuk" id="tanggal_masuk" type="date" class="form-control" value="{{ old('tanggal_masuk', $employees->tanggal_masuk) }}" required autofocus>
                                     
-                                    <label class="mt-2" for="id_company">Perusahaan</label>
+                                    <label class="mt-2" for="company_id">Perusahaan</label>
                                     <select name="company_id[]" id="company_id[]" class="form-control select2" multiple="multiple" required autofocus>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}"
                                                 @foreach ($employees->companies as $companyy)
-                                                @if (old('company_id[]', $companyy->pivot->company_id) == $company->id) 
+                                                @if (old('company_id', $companyy->pivot->company_id) == $company->id) 
                                                 selected 
                                                 @endif
                                                 @endforeach>
