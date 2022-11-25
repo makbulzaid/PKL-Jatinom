@@ -47,8 +47,8 @@
                             <th>Tanggal Masuk</th>
                             <th>Perusahaan</th>
                             <th>Jabatan</th>
-                            <th>Lokasi</th>
                             <th>Bagian</th>
+                            <th>Lokasi</th>
                             <th>Klasifikasi Pegawai</th>
                             <th>Klasifikasi Gaji</th>
                             <th>Nomor BPJS Ketenagakerjaan</th>
@@ -118,9 +118,8 @@
                                         style="display: inline;">
                                         @method('put')
                                         @csrf
-                                        <input type="hidden" value="1" name="keluar" id="keluar">
-                                        <input type="hidden" value="{{ $employee->nomor_induk }}" name="nomor_induk"
-                                            id="nomor_induk">
+                                        <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+                                        <input type="hidden" value="{{ $employee->nomor_induk }}" name="nomor_induk" id="nomor_induk">
                                         <button class="btn btn-icon icon-left btn-danger"
                                             onclick="return confirm('Are you sure')"><i
                                                 class="fas fa-times"></i>Hapus</button>

@@ -35,12 +35,12 @@ return new class extends Migration
             $table->string('lokasi');
             $table->string('klasifikasi_pegawai');
             $table->string('klasifikasi_gaji');
-            $table->string('nomor_bpjsket');
-            $table->date('tanggal_masuk_bpjsket');
-            $table->date('tanggal_keluar_bpjsket');
-            $table->string('nomor_bpjskes');
-            $table->date('tanggal_masuk_bpjskes');
-            $table->date('tanggal_keluar_bpjskes');
+            $table->string('nomor_bpjsket')->nullable();
+            $table->date('tanggal_masuk_bpjsket')->nullable();
+            $table->date('tanggal_keluar_bpjsket')->nullable();
+            $table->string('nomor_bpjskes')->nullable();
+            $table->date('tanggal_masuk_bpjskes')->nullable();
+            $table->date('tanggal_keluar_bpjskes')->nullable();
             // riwayat
             $table->boolean('keluar_jig')->default('0');
             $table->date('tanggal_keluar_jig')->nullable();

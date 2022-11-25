@@ -38,7 +38,7 @@
                                     <input name="tempat_lahir" id="tempat_lahir" type="text" class="form-control" value="{{ old('tempat_lahir') }}" required autofocus>
                                     
                                     <label class="mt-2" for="tanggal_lahir">Tanggal Lahir</label>
-                                    <input name="tanggal_lahir" id="tanggal_lahir" type="date" class="form-control datepicker" value="{{ old('tanggal_lahir') }}" required autofocus>
+                                    <input name="tanggal_lahir" id="tanggal_lahir" type="date" class="form-control" value="{{ old('tanggal_lahir') }}" required autofocus>
                                     
                                     <label class="mt-2" for="alamat">Alamat</label>
                                     <input name="alamat" id="alamat" type="text" class="form-control" value="{{ old('alamat') }}" required autofocus>
@@ -83,7 +83,7 @@
                                     <input name="nomor_induk" id="nomor_induk" type="text" class="form-control" value="{{ old('nomor_induk') }}" required autofocus>
                                     
                                     <label class="mt-2" for="tanggal_masuk">Tanggal Masuk</label>
-                                    <input name="tanggal_masuk" id="tanggal_masuk" type="date" class="form-control datepicker" value="{{ old('tanggal_masuk') }}" required autofocus>
+                                    <input name="tanggal_masuk" id="tanggal_masuk" type="date" class="form-control" value="{{ old('tanggal_masuk') }}" required autofocus>
                                     
                                     <label class="mt-2" for="id_company">Perusahaan</label>
                                     <select name="company_id[]" id="company_id[]" class="form-control select2" multiple="multiple" required autofocus>
@@ -127,22 +127,22 @@
                                     </select>
                                     
                                     <label class="mt-2" for="nomor_bpjsket">Nomor BPJS Ketenagakerjaan</label>
-                                    <input name="nomor_bpjsket" id="nomor_bpjsket" type="text" class="form-control" value="{{ old('nomor_bpjsket') }}" required autofocus>
+                                    <input name="nomor_bpjsket" id="nomor_bpjsket" type="text" class="form-control" value="{{ old('nomor_bpjsket') }}">
                                     
                                     <label class="mt-2" for="tanggal_masuk_bpjsket">Tanggal Masuk BPJS Ketenagakerjaan</label>
-                                    <input name="tanggal_masuk_bpjsket" id="tanggal_masuk_bpjsket" type="date" class="form-control datepicker" value="{{ old('tanggal_masuk_bpjsket') }}" required autofocus>
+                                    <input name="tanggal_masuk_bpjsket" id="tanggal_masuk_bpjsket" type="date" class="form-control" value="{{ old('tanggal_masuk_bpjsket') }}">
                                     
                                     <label class="mt-2" for="tanggal_keluar_bpjsket">Tanggal Keluar BPJS Ketenagakerjaan</label>
-                                    <input name="tanggal_keluar_bpjsket" id="tanggal_keluar_bpjsket" type="date" class="form-control datepicker" value="{{ old('tanggal_keluar_bpjsket') }}" required autofocus>
+                                    <input name="tanggal_keluar_bpjsket" id="tanggal_keluar_bpjsket" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjsket') }}">
                                     
                                     <label class="mt-2" for="nomor_bpjskes">Nomor BPJS Kesehatan</label>
-                                    <input name="nomor_bpjskes" id="nomor_bpjskes" type="text" class="form-control" value="{{ old('nomor_bpjskes') }}" required autofocus>
+                                    <input name="nomor_bpjskes" id="nomor_bpjskes" type="text" class="form-control" value="{{ old('nomor_bpjskes') }}">
                                                
                                     <label class="mt-2" for="tanggal_masuk_bpjskes">Tanggal Masuk BPJS Kesehatan</label>
-                                    <input name="tanggal_masuk_bpjskes" id="tanggal_masuk_bpjskes" type="date" class="form-control datepicker" value="{{ old('tanggal_masuk_bpjskes') }}" required autofocus>
+                                    <input name="tanggal_masuk_bpjskes" id="tanggal_masuk_bpjskes" type="date" class="form-control" value="{{ old('tanggal_masuk_bpjskes') }}">
                                         
                                    <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
-                                   <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control datepicker" value="{{ old('tanggal_keluar_bpjskes') }}" required autofocus>
+                                   <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes') }}">
                                    
                                    <label class="mt-2" for="riwayat_kantor1">Riwayat Kantor 1</label>
                                    <input name="riwayat_kantor1" id="riwayat_kantor1" type="text" class="form-control" value="{{ old('riwayat_kantor1') }}">
