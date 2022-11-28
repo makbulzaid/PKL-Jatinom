@@ -25,7 +25,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="nama">Nama</label>
+                                    <label class="mt-2" for="nama">Nama</label>
                                     <input name="nama" id="nama" type="text" class="form-control" value="{{ old('nama') }}" required autofocus>
                                     
                                     <label class="mt-2" for="jenis_kelamin">Jenis Kelamin</label>
@@ -76,9 +76,12 @@
                                         <option value="AB" @if(old('golongan_darah') == 'AB') selected @endif>AB</option>
                                     </select>
                                     
-                                    <label class="mt-2" for="nomor_induk">Nomor Induk Kependudukan KTP</label>
+                                    <label class="mt-2" for="ktp">Nomor Induk Kependudukan KTP</label>
                                     <input name="ktp" id="ktp" type="text" class="form-control" value="{{ old('ktp') }}" required autofocus>
                                     
+                                    <label class="mt-2" for="nomor_telepon">Nomor Telepon</label>
+                                    <input name="nomor_telepon" id="nomor_telepon" type="text" class="form-control" value="{{ old('nomor_telepon') }}" required autofocus>
+
                                     <label class="mt-2" for="ktp">Nomor Induk Karyawan</label>
                                     <input name="nomor_induk" id="nomor_induk" type="text" class="form-control" value="{{ old('nomor_induk') }}" required autofocus>
                                     
@@ -141,21 +144,22 @@
                                     <label class="mt-2" for="tanggal_masuk_bpjskes">Tanggal Masuk BPJS Kesehatan</label>
                                     <input name="tanggal_masuk_bpjskes" id="tanggal_masuk_bpjskes" type="date" class="form-control" value="{{ old('tanggal_masuk_bpjskes') }}">
                                         
-                                   <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
-                                   <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes') }}">
-                                   
-                                   <label class="mt-2" for="riwayat_kantor1">Riwayat Kantor 1</label>
-                                   <input name="riwayat_kantor1" id="riwayat_kantor1" type="text" class="form-control" value="{{ old('riwayat_kantor1') }}">
-                                   <label class="mt-2" for="riwayat_jabatan1">Riwayat Jabatan 1</label>
-                                   <input name="riwayat_jabatan1" id="riwayat_jabatan1" type="text" class="form-control" value="{{ old('riwayat_jabatan1') }}">
-                                   <label class="mt-2" for="riwayat_kantor2">Riwayat Kantor 2</label>
-                                   <input name="riwayat_kantor2" id="riwayat_kantor2" type="text" class="form-control" value="{{ old('riwayat_kantor2') }}">
-                                   <label class="mt-2" for="riwayat_jabatan2">Riwayat Jabatan 2</label>
-                                   <input name="riwayat_jabatan2" id="riwayat_jabatan2" type="text" class="form-control" value="{{ old('riwayat_jabatan2') }}">
-                                   <label class="mt-2" for="riwayat_kantor3">Riwayat Kantor 3</label>
-                                   <input name="riwayat_kantor3" id="riwayat_kantor3" type="text" class="form-control" value="{{ old('riwayat_kantor3') }}">
-                                   <label class="mt-2" for="riwayat_jabatan3">Riwayat Jabatan 3</label>
-                                   <input name="riwayat_jabatan3" id="riwayat_jabatan3" type="text" class="form-control" value="{{ old('riwayat_jabatan3') }}">
+                                    <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
+                                    <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes') }}">
+                                    
+                                    
+                                    <label class="mt-2" for="riwayat_pekerjaan">Riwayat Pekerjaan</label>
+                                    <input name="riwayat_pekerjaan" id="riwayat_pekerjaan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pekerjaan') }}">
+                                    
+                                    <label class="mt-2" for="riwayat_pendidikan">Riwayat Pendidikan</label>
+                                    <input name="riwayat_pendidikan" id="riwayat_pendidikan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pendidikan') }}">
+
+                                    <label class="mt-2" for="riwayat_pelanggaran">Riwayat Pelanggaran</label>
+                                    <input name="riwayat_pelanggaran" id="riwayat_pelanggaran" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pelanggaran') }}">
+
+                                    <label for="foto">Foto</label>                                    
+                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
+                                    <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
                                 </div>
                             </div>
                         </div>
@@ -165,4 +169,21 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('extrajs')
+<script>
+    function previewImage() {
+        const foto = document.querySelector('#foto');
+        const imgPreview = document.querySelector('.img-preview');
+
+        imgPreview.style.display = 'block';
+        const oFReader = new FileReader();
+
+        oFReader.readAsDataURL(foto.files[0]);
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 @endsection

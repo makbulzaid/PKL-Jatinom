@@ -43,6 +43,7 @@
                             <th>Pendidikan</th>
                             <th>Golongan Darah</th>
                             <th>Nomor KTP</th>
+                            <th>Nomor Telepon</th>
                             <th>Nomor Induk Karyawan</th>
                             <th>Tanggal Masuk</th>
                             <th>Perusahaan</th>
@@ -58,12 +59,9 @@
                             <th>Tanggal Masuk BPJS Kesehatan</th>
                             <th>Tanggal Keluar BPJS Kesehatan</th>
                             <th>Tanggal Keluar JIG</th>
-                            <th>Riwayat Kantor 1</th>
-                            <th>Riwayat Jabatan 1</th>
-                            <th>Riwayat Kantor 2</th>
-                            <th>Riwayat Jabatan 2</th>
-                            <th>Riwayat Kantor 3</th>
-                            <th>Riwayat Jabatan 3</th>
+                            <th>Riwayat Pekerjaan</th>
+                            <th>Riwayat Pendidikan</th>
+                            <th>Riwayat Pelanggaran</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -82,6 +80,7 @@
                                 <td>{{ $employee->pendidikan }}</td>
                                 <td>{{ $employee->golongan_darah }}</td>
                                 <td>{!! $employee->ktp !!}</td>
+                                <td>{!! $employee->nomor_telepon !!}</td>
                                 <td>{!! $employee->nomor_induk !!}</td>
                                 <td>{{ $employee->tanggal_masuk }}</td>
                                 <td>
@@ -102,28 +101,46 @@
                                 <td>{{ $employee->tanggal_masuk_bpjskes }}</td>
                                 <td>{{ $employee->tanggal_keluar_bpjskes }}</td>
                                 <td>{{ $employee->tanggal_keluar_jig }}</td>
-                                <td>{{ $employee->riwayat_kantor1 }}</td>
-                                <td>{{ $employee->riwayat_jabatan1 }}</td>
-                                <td>{{ $employee->riwayat_kantor2 }}</td>
-                                <td>{{ $employee->riwayat_jabatan2 }}</td>
-                                <td>{{ $employee->riwayat_kantor3 }}</td>
-                                <td>{{ $employee->riwayat_jabatan3 }}</td>
+                                <td>
+                                    @foreach (explode(',', $employee->riwayat_pekerjaan) as $riwayat_pekerjaan)
+                                    {{ $riwayat_pekerjaan }}
+                                    <br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach (explode(',', $employee->riwayat_pendidikan) as $riwayat_pendidikan)
+                                    {{ $riwayat_pendidikan }}
+                                    <br>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach (explode(',', $employee->riwayat_pelanggaran) as $riwayat_pelanggaran)
+                                    {{ $riwayat_pelanggaran }}
+                                    <br>
+                                    @endforeach
+                                </td>
                                 <td>
                                     {{-- <a href="/employee/{{ $employee->nomor_induk }}"
                                         class="btn btn-icon icon-left btn-info"><i class="fas fa-info-circle"></i>
                                         Detail</a> --}}
                                     <a href="/employee/{{ $employee->nomor_induk }}/edit"
-                                        class="btn btn-icon icon-left btn-primary"><i class="far fa-edit"></i> Edit</a>
+                                        class="btn btn-icon icon-left btn-primary"><i class="far fa-edit"></i>  Edit </a>
+                                    @if(request('company') == 'keluar')
+                                    <form action="/employee/{{ $employee->nomor_induk }}" method="post" style="display: inline;">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+                                    </form>  
+                                    @else    
                                     <form action="/employee/keluar/{{ $employee->nomor_induk }}" method="post"
                                         style="display: inline;">
                                         @method('put')
                                         @csrf
                                         <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
                                         <input type="hidden" value="{{ $employee->nomor_induk }}" name="nomor_induk" id="nomor_induk">
-                                        <button class="btn btn-icon icon-left btn-danger"
-                                            onclick="return confirm('Are you sure')"><i
-                                                class="fas fa-times"></i>Hapus</button>
+                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
                                     </form>
+                                    @endif
                                 </td>
                             </tr>   
                         @endforeach
@@ -153,6 +170,8 @@
                     {
                         extend: 'pdf',
                         orientation: 'landscape',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
                         split: {
                             extend: 'pdf',
                             text: 'PDF-onlyshow',
@@ -176,7 +195,7 @@
                 dom: 'Bfrtip',
                 "columnDefs": [{
                     "visible": false,
-                    "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32 ]
+                    "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
                 },
                 ],
                 colReorder: true,

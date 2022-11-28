@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('pendidikan');
             $table->string('golongan_darah');
             $table->string('ktp');
+            $table->string('nomor_telepon');
             // informasi pekerjaan
             $table->string('nomor_induk');
             $table->date('tanggal_masuk');
@@ -44,12 +45,11 @@ return new class extends Migration
             // riwayat
             $table->boolean('keluar_jig')->default('0');
             $table->date('tanggal_keluar_jig')->nullable();
-            $table->string('riwayat_kantor1')->nullable();
-            $table->string('riwayat_jabatan1')->nullable();
-            $table->string('riwayat_kantor2')->nullable();
-            $table->string('riwayat_jabatan2')->nullable();
-            $table->string('riwayat_kantor3')->nullable();
-            $table->string('riwayat_jabatan3')->nullable();
+            $table->string('riwayat_pekerjaan')->nullable();
+            $table->string('riwayat_pendidikan')->nullable();
+            $table->string('riwayat_pelanggaran')->nullable();
+            //foto
+            $table->string('foto')->nullable();
             $table->timestamps();
             // $table->foreignId('id_company')->nullable();
             // $table->string('usia_employee');

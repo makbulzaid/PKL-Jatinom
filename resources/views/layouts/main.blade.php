@@ -7,11 +7,9 @@
     <title>@yield('title')</title>
 
     {{-- css --}}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
 
     {{-- template css --}}
     <link rel="stylesheet" href="/assets/node_modules/bootstrap-daterangepicker/daterangepicker.css">
@@ -23,6 +21,7 @@
     
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/components.css">
+    
     @yield('extracss')
 </head>
 
@@ -63,6 +62,7 @@
             <script src="/assets/js/stisla.js"></script>
 
             <!-- JS Libraies -->
+            
             <script src="/assets/node_modules/cleave.js/dist/cleave.min.js"></script>
             <script src="/assets/node_modules/cleave.js/dist/addons/cleave-phone.us.js"></script>
             <script src="/assets/node_modules/jquery-pwstrength/jquery.pwstrength.min.js"></script>
@@ -79,6 +79,7 @@
 
             <!-- Page Specific JS File -->
             <script src="/assets/js/page/forms-advanced-forms.js"></script>
+            
             @yield('extrajs')
 </body>
 

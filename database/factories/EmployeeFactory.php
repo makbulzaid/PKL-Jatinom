@@ -31,7 +31,7 @@ class EmployeeFactory extends Factory
         return [
             // informasi pribadi
             'nama' => fake()->name(),
-            'jenis_kelamin' => fake()->randomElement(['male', 'female']),
+            'jenis_kelamin' => fake()->randomElement(['Laki-Laki', 'Perempuan']),
             'tempat_lahir' => fake()->city(),
             'tanggal_lahir' => fake()->date(),
             'alamat' => fake()->streetAddress(),
@@ -41,6 +41,7 @@ class EmployeeFactory extends Factory
             'pendidikan' => fake()->randomElement(['Tidak Bersekolah', 'SD', 'SMP', 'SMA', 'D1/D2/D3', 'D4/S1', 'S2', 'S3']),
             'golongan_darah' => fake()->randomElement(['O', 'A', 'B', 'AB']),
             'ktp' => rand(3514512601010008, 3814502663218887),
+            'nomor_telepon' => rand(6281256788521, 6287779518520),
             // informasi pekerjaan
             'nomor_induk' => rand(3514512601010008, 3814502663218887),
             'tanggal_masuk' => fake()->date(),
@@ -58,12 +59,9 @@ class EmployeeFactory extends Factory
             // riwayat
             'keluar_jig' => rand(0, 1),
             'tanggal_keluar_jig' => fake()->date(),
-            'riwayat_kantor1' => fake()->randomElement(['Indofood', 'Gojek', 'BRI']),
-            'riwayat_jabatan1' => fake()->randomElement(['Staff', 'Kepala', 'Direktur']),
-            'riwayat_kantor2' => fake()->randomElement(['Indofood', 'Gojek', 'BRI']),
-            'riwayat_jabatan2' => fake()->randomElement(['Staff', 'Kepala', 'Direktur']),
-            'riwayat_kantor3' => fake()->randomElement(['Indofood', 'Gojek', 'BRI']),
-            'riwayat_jabatan3' => fake()->randomElement(['Staff', 'Kepala', 'Direktur']),
+            'riwayat_pekerjaan' => fake()->randomElement(['Indofood-Ketua,Gojek-Wakil Ketua', 'Gojek-Ketua,Petrokimia-Wakil Kepala']),
+            'riwayat_pendidikan' => fake()->randomElement(['SD-SD 1 Blitar, SMP-SMP 1 Jakarta, SMA-SMA2 Bandung', 'SD-SD 1 Blitar, SMP-SMP 1 Jakarta, SMA-SMA2 Bandung, S1-Universitas Brawijaya-Pertanian']),
+            'riwayat_pelanggaran' => fake()->randomElement(['21/03/2017-Terlambat', '']),
         ];
     }
 }

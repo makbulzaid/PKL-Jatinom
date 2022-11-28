@@ -9,6 +9,7 @@ use App\Models\Company;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -69,6 +70,8 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
+        // ddd($request);
+        
         $validationData = $request->validate([
             'nama' => 'required',
             'jenis_kelamin' => 'required',
@@ -81,6 +84,7 @@ class EmployeeController extends Controller
             'pendidikan' => 'required',
             'golongan_darah' => 'required',
             'ktp' => 'required',
+            'nomor_telepon' => 'required',
             // informasi pekerjaan
             'nomor_induk' => 'required',
             'tanggal_masuk' => 'required',
@@ -97,13 +101,17 @@ class EmployeeController extends Controller
             'tanggal_keluar_bpjskes' => 'nullable',
             // riwayat
             'tanggal_keluar_jig' => 'nullable',
-            'riwayat_kantor1' => 'nullable',
-            'riwayat_jabatan1' => 'nullable',
-            'riwayat_kantor2' => 'nullable',
-            'riwayat_jabatan2' => 'nullable',
-            'riwayat_kantor3' => 'nullable',
-            'riwayat_jabatan3' => 'nullable',
+            'riwayat_pekerjaan' => 'nullable',
+            'riwayat_pendidikan' => 'nullable',
+            'riwayat_pelanggaran' => 'nullable',
+            //foto
+            'foto' => 'image|file|max:2056',
         ]);
+
+        if($request->file('foto')){
+            $validationData['foto'] = $request->file('foto')->store('foto-pegawai', 'public');
+        }
+
         
         $request = Employee::create($validationData)->companies()->sync((array)$request->input('company_id'));
         return redirect('/employee')->with('success', 'Karyawan telah ditambahkan!');
@@ -117,13 +125,14 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
+        
         return view('show2', [
             'employees' => $employee,
             'companies' => Company::all(),
             'link' => request('company'),
             'header' => $employee->nama,
             'age' => Carbon::parse($employee->tanggal_lahir)->age,
-            'masakerja' => Carbon::parse($employee->tanggal_masuk)->age
+            'masakerja' => Carbon::parse($employee->tanggal_masuk)->age,
         ]);
     }
 
@@ -164,6 +173,7 @@ class EmployeeController extends Controller
             'pendidikan' => 'required',
             'golongan_darah' => 'required',
             'ktp' => 'required',
+            'nomor_telepon' => 'required',
             // informasi pekerjaan
             'nomor_induk' => 'required',
             'tanggal_masuk' => 'required',
@@ -181,12 +191,19 @@ class EmployeeController extends Controller
             // riwayat
             'tanggal_keluar_jig' => 'nullable',
             'riwayat_kantor1' => 'nullable',
-            'riwayat_jabatan1' => 'nullable',
-            'riwayat_kantor2' => 'nullable',
-            'riwayat_jabatan2' => 'nullable',
-            'riwayat_kantor3' => 'nullable',
-            'riwayat_jabatan3' => 'nullable',
+            'riwayat_pekerjaan' => 'nullable',
+            'riwayat_pendidikan' => 'nullable',
+            'riwayat_pelanggaran' => 'nullable',
+            //foto
+            'foto' => 'image|file|max:2056',
         ]);
+        
+        if($request->file('foto')){
+            if($employee->foto){
+                Storage::disk('public')->delete($employee->foto);
+            }
+            $validationData['foto'] = $request->file('foto')->store('foto-pegawai', 'public');
+        }
         
         $employee->update($validationData);
         $employee->companies()->sync((array)$request->input('company_id'));
@@ -202,8 +219,12 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
+        if($employee->foto){
+            Storage::disk('public')->delete($employee->foto);
+        }
+        
         Employee::destroy($employee->id);
-        return redirect('/employee')->with('success', 'Data telah dihapus!');
+        return redirect('/employee')->with('success', 'Karyawan telah dihapus!');
     }
 
     public function keluar(Request $request, $nomor_induk){
@@ -216,6 +237,6 @@ class EmployeeController extends Controller
         // dd($keluar);
 
         Employee::where('nomor_induk', $nomor_induk)->update($keluar);
-        return redirect('/employee')->with('success', 'Karyawan telah dihapus!');
+        return redirect('/employee')->with('success', 'Karyawan telah diarsipkan!');
     }
 }

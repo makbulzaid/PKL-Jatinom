@@ -1,20 +1,31 @@
 @extends('layouts.main')
 
 @section('title')
-    Tambah Karyawan
+{{ $employees->nama }}
 @endsection
 
 @section('header')
-    <h1>{{ $header }}</h1>
+    <h1>Edit Karyawan</h1>
 
     <div class="section-header-breadcrumb">
         <a href="#" class="btn btn-lg icon-left btn-secondary mr-2"><i class="fas fa-edit"></i> Edit</a>
         
-        <form action="/employee/{{ $employees->nomor_induk }}" method="post">
+        @if($employees->keluar_jig == 1)
+        <form action="/employee/{{ $employees->nomor_induk }}" method="post" style="display: inline;">
             @method('delete')
             @csrf
             <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+        </form>  
+        @else    
+        <form action="/employee/keluar/{{ $employees->nomor_induk }}" method="post"
+            style="display: inline;">
+            @method('put')
+            @csrf
+            <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+            <input type="hidden" value="{{ $employees->nomor_induk }}" name="nomor_induk" id="nomor_induk">
+            <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
         </form>
+        @endif
     </div>
 @endsection
 
@@ -86,6 +97,9 @@
                                     <label class="mt-2" for="ktp">Nomor Induk Kependudukan KTP</label>
                                     <input name="ktp" id="ktp" type="text" class="form-control" value="{{ old('ktp', $employees->ktp) }}" required autofocus>
 
+                                    <label class="mt-2" for="nomor_telepon">Nomor Telepon</label>
+                                    <input name="nomor_telepon" id="nomor_telepon" type="text" class="form-control" value="{{ old('nomor_telepon', $employees->nomor_telepon) }}" required autofocus>
+
                                     <label class="mt-2" for="nomor_induk">Nomor Induk Karyawan</label>
                                     <input name="nomor_induk" id="nomor_induk" type="text" class="form-control" value="{{ old('nomor_induk', $employees->nomor_induk) }}" required autofocus>
                                     
@@ -154,21 +168,25 @@
                                     <label class="mt-2" for="tanggal_masuk_bpjskes">Tanggal Masuk BPJS Kesehatan</label>
                                     <input name="tanggal_masuk_bpjskes" id="tanggal_masuk_bpjskes" type="date" class="form-control" value="{{ old('tanggal_masuk_bpjskes', $employees->tanggal_masuk_bpjskes) }}">
                                         
-                                   <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
-                                   <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes', $employees->tanggal_keluar_bpjskes_employee) }}">
+                                    <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
+                                    <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes', $employees->tanggal_keluar_bpjskes) }}">
 
-                                   <label class="mt-2" for="riwayat_kantor1">Riwayat Kantor 1</label>
-                                   <input name="riwayat_kantor1" id="riwayat_kantor1" type="text" class="form-control" value="{{ old('riwayat_kantor1', $employees->riwayat_kantor1) }}">
-                                   <label class="mt-2" for="riwayat_jabatan1">Riwayat Jabatan 1</label>
-                                   <input name="riwayat_jabatan1" id="riwayat_jabatan1" type="text" class="form-control" value="{{ old('riwayat_jabatan1', $employees->riwayat_jabatan1) }}">
-                                   <label class="mt-2" for="riwayat_kantor2">Riwayat Kantor 2</label>
-                                   <input name="riwayat_kantor2" id="riwayat_kantor2" type="text" class="form-control" value="{{ old('riwayat_kantor2', $employees->riwayat_kantor2) }}">
-                                   <label class="mt-2" for="riwayat_jabatan2">Riwayat Jabatan 2</label>
-                                   <input name="riwayat_jabatan2" id="riwayat_jabatan2" type="text" class="form-control" value="{{ old('riwayat_jabatan2', $employees->riwayat_jabatan2) }}">
-                                   <label class="mt-2" for="riwayat_kantor3">Riwayat Kantor 3</label>
-                                   <input name="riwayat_kantor3" id="riwayat_kantor3" type="text" class="form-control" value="{{ old('riwayat_kantor3', $employees->riwayat_kantor3) }}">
-                                   <label class="mt-2" for="riwayat_jabatan3">Riwayat Jabatan 3</label>
-                                   <input name="riwayat_jabatan3" id="riwayat_jabatan3" type="text" class="form-control" value="{{ old('riwayat_jabatan3', $employees->riwayat_jabatan3) }}">
+                                    <label class="mt-2" for="riwayat_pekerjaan">Riwayat Pekerjaan</label>
+                                    <input name="riwayat_pekerjaan" id="riwayat_pekerjaan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pekerjaan', $employees->riwayat_pekerjaan) }}">
+
+                                    <label class="mt-2" for="riwayat_pendidikan">Riwayat Pendidikan</label>
+                                    <input name="riwayat_pendidikan" id="riwayat_pendidikan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pendidikan', $employees->riwayat_pendidikan) }}">
+
+                                    <label class="mt-2" for="riwayat_pelangggaran">Riwayat Pelanggaran</label>
+                                    <input name="riwayat_pelanggaran" id="riwayat_pelanggaran" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pelanggaran', $employees->riwayat_pelanggaran) }}">
+
+                                    <label for="foto">Foto</label>
+                                    @if ($employees->foto)
+                                    <img src="{{ asset('storage/' . $employees->foto) }}" class="img-preview img-fluid mb-2 p-0 col-sm-3 d-block">
+                                    @else
+                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
+                                    @endif                                    
+                                    <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
                                 </div>
                             </div>
                         </div>
@@ -178,4 +196,21 @@
             </form>
         </div>
     </div>
+@endsection
+
+@section('extrajs')
+<script>
+    function previewImage() {
+        const foto = document.querySelector('#foto');
+        const imgPreview = document.querySelector('.img-preview');
+
+        imgPreview.style.display = 'block';
+        const oFReader = new FileReader();
+
+        oFReader.readAsDataURL(foto.files[0]);
+        oFReader.onload = function(oFREvent) {
+            imgPreview.src = oFREvent.target.result;
+        }
+    }
+</script>
 @endsection

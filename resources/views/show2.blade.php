@@ -5,20 +5,31 @@
     @endsection
 
     @section('extracss')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/cr-1.6.1/date-1.2.0/fc-4.2.1/sb-1.4.0/sl-1.5.0/datatables.min.css"/>
-@endsection
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.13.1/b-2.3.3/b-colvis-2.3.3/b-html5-2.3.3/b-print-2.3.3/cr-1.6.1/date-1.2.0/fc-4.2.1/sb-1.4.0/sl-1.5.0/datatables.min.css"/>
+    @endsection
 
     @section('header')
         <h1>Detail Karyawan</h1>
         <div class="section-header-breadcrumb">
             <a href="/employee/{{ $employees->nomor_induk }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i
                     class="fas fa-edit"></i> Edit</a>
-            <form action="/employee/{{ $employees->nomor_induk }}" method="post">
+            
+            @if($employees->keluar_jig == 1)
+            <form action="/employee/{{ $employees->nomor_induk }}" method="post" style="display: inline;">
                 @method('delete')
                 @csrf
-                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i
-                        class="fas fa-times"></i> Hapus</button>
+                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+            </form>  
+            @else    
+            <form action="/employee/keluar/{{ $employees->nomor_induk }}" method="post"
+                style="display: inline;">
+                @method('put')
+                @csrf
+                <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+                <input type="hidden" value="{{ $employees->nomor_induk }}" name="nomor_induk" id="nomor_induk">
+                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
             </form>
+            @endif
         </div>
     @endsection
 
@@ -37,6 +48,10 @@
                             <tr>
                                 <td style="font-weight:bold; font-size:24px">Informasi Pribadi</td>
                                 <td></td>
+                            </tr>
+                            <tr>
+                                <td>Foto</td>
+                                <td> <img src="{{ asset('storage/' . $employees->foto) }}"></td>
                             </tr>
                             <tr>
                                 <th>Nama</th>
@@ -87,6 +102,22 @@
                                 <td>{{ $employees->ktp }}</td>
                             </tr>
                             <tr>
+                                <th>Nomor Telepon</th>
+                                <td>{{ $employees->nomor_telepon }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
                                 <td style="font-weight:bold; font-size:24px">Informasi Pekerjaan</td>
                                 <td></td>
                             </tr>
@@ -104,12 +135,13 @@
                                     @foreach ($employees->companies as $company)
                                         {{ $company->nama_company }}
                                         <br>
+                                        <br>
                                     @endforeach
                                 </td>
                             </tr>
                             <tr>
                                 <th>Jabatan</th>
-                                <td>{{ $employees->Jabatan }}</td>
+                                <td>{{ $employees->jabatan }}</td>
                             </tr>
                             <tr>
                                 <th>Bagian</th>
@@ -130,7 +162,7 @@
                             </tr>
                             <tr>
                                 <th>Klasifikasi Gaji</th>
-                                <td>{{ $employees->gaji }}</td>
+                                <td>{{ $employees->klasifikasi_gaji }}</td>
                             </tr>
                             <tr>
                                 <th>Nomor BPJS Ketenagakerjaan</th>
@@ -157,6 +189,18 @@
                                 <td>{{ $employees->tanggal_keluar_bpjskes }}</td>
                             </tr>
                             <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
                                 <td style="font-weight:bold; font-size:24px">Riwayat</td>
                                 <td></td>
                             </tr>
@@ -165,28 +209,34 @@
                                 <td>{{ $employees->tanggal_keluar_bpjskes }}</td>
                             </tr>
                             <tr>
-                                <th>Riwayat Kantor 1</th>
-                                <td>{{ $employees->riwayat_kantor1 }}</td>
+                                <th>Riwayat Pekerjaan</th>
+                                <td>
+                                    @foreach (explode(',', $employees->riwayat_pekerjaan) as $riwayat_pekerjaan)
+                                    {{ $riwayat_pekerjaan }}
+                                    <br>
+                                    <br>
+                                    @endforeach
+                                </td>
                             </tr>
                             <tr>
-                                <th>Riwayat Jabatan 1</th>
-                                <td>{{ $employees->riwayat_jabatan1 }}</td>
+                                <th>Riwayat Pendidikan</th>
+                                <td>
+                                    @foreach (explode(',', $employees->riwayat_pendidikan) as $riwayat_pendidikan)
+                                    {{ $riwayat_pendidikan }}
+                                    <br>
+                                    <br>
+                                    @endforeach
+                                </td>
                             </tr>
                             <tr>
-                                <th>Riwayat Kantor 2</th>
-                                <td>{{ $employees->riwayat_kantor2 }}</td>
-                            </tr>
-                            <tr>
-                                <th>Riwayat Jabatan 2</th>
-                                <td>{{ $employees->riwayat_jabatan2 }}</td>
-                            </tr>
-                            <tr>
-                                <th>Riwayat Kantor 3</th>
-                                <td>{{ $employees->riwayat_kantor3 }}</td>
-                            </tr>
-                            <tr>
-                                <th>Riwayat Jabatan 3</th>
-                                <td>{{ $employees->riwayat_jabatan3 }}</td>
+                                <th>Riwayat Pelanggaran</th>
+                                <td>
+                                    @foreach (explode(',', $employees->riwayat_pelanggaran) as $riwayat_pelanggaran)
+                                    {{ $riwayat_pelanggaran }}
+                                    <br>
+                                    <br>
+                                    @endforeach
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -205,8 +255,8 @@
         $(document).ready(function () {
             var table = $('#table').DataTable({
                 buttons: [
-                    'pdf',
-                    'excel',
+                    'pdfHtml5',
+                    'excelHtml5',
                 ],
                 dom: 'Bfrtip',
                 paging: false,
