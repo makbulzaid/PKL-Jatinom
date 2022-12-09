@@ -27,14 +27,14 @@ return new class extends Migration
             $table->string('pendidikan');
             $table->string('golongan_darah');
             $table->string('ktp');
-            $table->string('nomor_telepon');
+            $table->string('nomor_telepon')->nullable();
             // informasi pekerjaan
             $table->string('nomor_induk');
             $table->date('tanggal_masuk');
             $table->string('bagian');
             $table->string('jabatan');
             $table->string('lokasi');
-            $table->string('klasifikasi_pegawai');
+            $table->string('klasifikasi_karyawan');
             $table->string('klasifikasi_gaji');
             $table->string('nomor_bpjsket')->nullable();
             $table->date('tanggal_masuk_bpjsket')->nullable();
@@ -43,17 +43,17 @@ return new class extends Migration
             $table->date('tanggal_masuk_bpjskes')->nullable();
             $table->date('tanggal_keluar_bpjskes')->nullable();
             // riwayat
-            $table->boolean('keluar_jig')->default('0');
-            $table->date('tanggal_keluar_jig')->nullable();
-            $table->string('riwayat_pekerjaan')->nullable();
-            $table->string('riwayat_pendidikan')->nullable();
-            $table->string('riwayat_pelanggaran')->nullable();
+            $table->text('riwayat_pekerjaan')->nullable();
+            $table->text('riwayat_pendidikan')->nullable();
+            $table->text('riwayat_pelanggaran')->nullable();
+            $table->text('keterangan')->nullable();
+            //keluar
+            $table->boolean('keluar')->default('0');
+            $table->date('tanggal_keluar')->nullable();
             //foto
             $table->string('foto')->nullable();
+            $table->string('berkas')->nullable();
             $table->timestamps();
-            // $table->foreignId('id_company')->nullable();
-            // $table->string('usia_employee');
-            // $table->string('masa_kerja_employee');
         });
     }
 

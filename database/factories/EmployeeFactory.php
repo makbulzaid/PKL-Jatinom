@@ -16,18 +16,6 @@ class EmployeeFactory extends Factory
      */
     public function definition()
     {
-        // $gender = fake()->randomElement(['male', 'female']);
-        // $status = fake()->randomElement(['Menikah', 'Janda/Duda', 'Belum Menikah']);
-        // $pendidikan = fake()->randomElement(['Tidak Bersekolah', 'SD', 'SMP', 'SMA', 'D1/D2/D3', 'D4/S1', 'S2', 'S3']);
-        // $darah = fake()->randomElement(['O', 'A', 'B', 'AB']);
-        // $bagian = fake()->randomElement(['Personalia', 'Pemasaran', 'Umum', 'Administrasi']);
-        // $jabatan = fake()->randomElement(['Kepala Bagian/Lokasi', 'Wakil Kepala Bagian/Lokasi', 'Manajer', 'Direktur', 'Staff']);
-        // $lokasi = fake()->randomElement(['Office', 'Aulia PS', 'JIF Blitar']);
-        // $pegawai = fake()->randomElement(['Kontrak', 'Tetap', 'Harian']);
-        // $gaji = fake()->randomElement(['Bulanan', 'Harian']);
-        // $kantor = fake()->randomElement(['Indofood', 'Gojek', 'BRI']);
-        // $jabatanx = fake()->randomElement(['Staff', 'Kepala', 'Direktur']);
-        
         return [
             // informasi pribadi
             'nama' => fake()->name(),
@@ -48,7 +36,7 @@ class EmployeeFactory extends Factory
             'bagian' => fake()->randomElement(['Personalia', 'Pemasaran', 'Umum', 'Administrasi']),
             'jabatan' => fake()->randomElement(['Kepala Bagian/Lokasi', 'Wakil Kepala Bagian/Lokasi', 'Manajer', 'Direktur', 'Staff']),
             'lokasi' => fake()->randomElement(['Office', 'Aulia PS', 'JIF Blitar']),
-            'klasifikasi_pegawai' => fake()->randomElement(['Kontrak', 'Tetap', 'Harian']),
+            'klasifikasi_karyawan' => fake()->randomElement(['Kontrak', 'Tetap', 'Harian']),
             'klasifikasi_gaji' => fake()->randomElement(['Bulanan', 'Harian']),
             'nomor_bpjsket' => rand(3514512601010008, 3814502663218887),
             'tanggal_masuk_bpjsket' => fake()->date(),
@@ -57,11 +45,13 @@ class EmployeeFactory extends Factory
             'tanggal_masuk_bpjskes' => fake()->date(),
             'tanggal_keluar_bpjskes' => fake()->date(),
             // riwayat
-            'keluar_jig' => rand(0, 1),
-            'tanggal_keluar_jig' => fake()->date(),
             'riwayat_pekerjaan' => fake()->randomElement(['Indofood-Ketua,Gojek-Wakil Ketua', 'Gojek-Ketua,Petrokimia-Wakil Kepala']),
             'riwayat_pendidikan' => fake()->randomElement(['SD-SD 1 Blitar, SMP-SMP 1 Jakarta, SMA-SMA2 Bandung', 'SD-SD 1 Blitar, SMP-SMP 1 Jakarta, SMA-SMA2 Bandung, S1-Universitas Brawijaya-Pertanian']),
             'riwayat_pelanggaran' => fake()->randomElement(['21/03/2017-Terlambat', '']),
+            'keterangan' => fake()->randomElement(['Pegawai sedang cuti', '']),
+            //keluar
+            'keluar' => rand(0, 1),
+            'tanggal_keluar' => fake()->date(),
         ];
     }
 }

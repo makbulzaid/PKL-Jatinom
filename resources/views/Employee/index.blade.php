@@ -31,7 +31,7 @@
                 <table class="display" style="width:100%" id="table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th></th>
                             <th>Nama</th>
                             <th>Jenis Kelamin</th>
                             <th>Tempat Lahir</th>
@@ -50,7 +50,7 @@
                             <th>Jabatan</th>
                             <th>Bagian</th>
                             <th>Lokasi</th>
-                            <th>Klasifikasi Pegawai</th>
+                            <th>Klasifikasi Karyawan</th>
                             <th>Klasifikasi Gaji</th>
                             <th>Nomor BPJS Ketenagakerjaan</th>
                             <th>Tanggal Masuk BPJS Ketenagakerjaan</th>
@@ -58,17 +58,18 @@
                             <th>Nomor BPJS Kesehatan</th>
                             <th>Tanggal Masuk BPJS Kesehatan</th>
                             <th>Tanggal Keluar BPJS Kesehatan</th>
-                            <th>Tanggal Keluar JIG</th>
                             <th>Riwayat Pekerjaan</th>
                             <th>Riwayat Pendidikan</th>
                             <th>Riwayat Pelanggaran</th>
+                            <th>Keterangan</th>
+                            <th>Tanggal Keluar</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($employees as $employee)
                             <tr>
-                                <td>{!! $loop->iteration !!}</td>
+                                <td></td>
                                 <td><a class="text-decoration-none" href="/employee/{{ $employee->nomor_induk }}"> {!! $employee->nama !!}</a></td>
                                 <td>{{ $employee->jenis_kelamin }}</td>
                                 <td>{{ $employee->tempat_lahir }}</td>
@@ -92,7 +93,7 @@
                                 <td>{!! $employee->jabatan !!}</td>
                                 <td>{!! $employee->bagian !!}</td>
                                 <td>{!! $employee->lokasi !!}</td>
-                                <td>{{ $employee->klasifikasi_pegawai }}</td>
+                                <td>{{ $employee->klasifikasi_karyawan }}</td>
                                 <td>{{ $employee->klasifikasi_gaji }}</td>
                                 <td>{{ $employee->nomor_bpjsket }}</td>
                                 <td>{{ $employee->tanggal_masuk_bpjsket }}</td>
@@ -100,7 +101,6 @@
                                 <td>{{ $employee->nomor_bpjskes }}</td>
                                 <td>{{ $employee->tanggal_masuk_bpjskes }}</td>
                                 <td>{{ $employee->tanggal_keluar_bpjskes }}</td>
-                                <td>{{ $employee->tanggal_keluar_jig }}</td>
                                 <td>
                                     @foreach (explode(',', $employee->riwayat_pekerjaan) as $riwayat_pekerjaan)
                                     {{ $riwayat_pekerjaan }}
@@ -119,26 +119,28 @@
                                     <br>
                                     @endforeach
                                 </td>
+                                <td>{{ $employee->keterangan }}</td>
+                                <td>{{ $employee->tanggal_keluar }}</td>
                                 <td>
                                     {{-- <a href="/employee/{{ $employee->nomor_induk }}"
                                         class="btn btn-icon icon-left btn-info"><i class="fas fa-info-circle"></i>
                                         Detail</a> --}}
                                     <a href="/employee/{{ $employee->nomor_induk }}/edit"
                                         class="btn btn-icon icon-left btn-primary"><i class="far fa-edit"></i>  Edit </a>
-                                    @if(request('company') == 'keluar')
+                                    @if(request('company') == 'arsip')
                                     <form action="/employee/{{ $employee->nomor_induk }}" method="post" style="display: inline;">
                                         @method('delete')
                                         @csrf
-                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Menghapus Data Permanen?')"><i class="fas fa-times"></i> Hapus</button>
                                     </form>  
                                     @else    
                                     <form action="/employee/keluar/{{ $employee->nomor_induk }}" method="post"
                                         style="display: inline;">
                                         @method('put')
                                         @csrf
-                                        <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+                                        <input type="hidden" value="1" name="keluar" id="keluar">
                                         <input type="hidden" value="{{ $employee->nomor_induk }}" name="nomor_induk" id="nomor_induk">
-                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+                                        <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Memindahkan Data ke Arsip?')"><i class="fas fa-times"></i> Hapus</button>
                                     </form>
                                     @endif
                                 </td>
@@ -163,13 +165,12 @@
     
     <script>
         $(document).ready(function () {
-            var table = $('#table').DataTable({
+            var t = $('#table').DataTable({
                 buttons: [
                     'colvis',
                     'searchBuilder',
                     {
                         extend: 'pdf',
-                        orientation: 'landscape',
                         orientation: 'landscape',
                         pageSize: 'LEGAL',
                         split: {
@@ -195,7 +196,12 @@
                 dom: 'Bfrtip',
                 "columnDefs": [{
                     "visible": false,
-                    "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+                    "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+                },
+                {
+                    sortable: false,
+                    "class": "index",
+                    targets: 0,
                 },
                 ],
                 colReorder: true,
@@ -212,6 +218,13 @@
                 // scrollX: 50,
                 // scroller: true,
             });
+            t.on('order.dt search.dt', function () {
+                let i = 1;
+         
+                t.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                    this.data(i++);
+                });
+            }).draw();
     });
     </script>
 @endsection

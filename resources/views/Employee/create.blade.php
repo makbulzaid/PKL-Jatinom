@@ -98,6 +98,11 @@
                                     <label class="mt-2"for="jabatan">Jabatan</label>
                                     <input name="jabatan" id="jabatan" type="text" class="form-control" value="{{ old('jabatan') }}" required autofocus>
                                     
+                                    <label class="mt-2"for="bagian">Bagian</label>
+                                    <input name="bagian" id="bagian" type="text" class="form-control" value="{{ old('bagian') }}" required autofocus>
+                                    
+                                    <label class="mt-2" for="lokasi">Lokasi</label>
+                                    <input name="lokasi" id="lokasi" type="text" class="form-control" value="{{ old('lokasi') }}" required autofocus>
                                 </div>
                             </div>
                         </div>
@@ -108,19 +113,12 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    
-                                    <label class="mt-2"for="bagian">Bagian</label>
-                                    <input name="bagian" id="bagian" type="text" class="form-control" value="{{ old('bagian') }}" required autofocus>
-                                    
-                                    <label class="mt-2" for="lokasi">Lokasi</label>
-                                    <input name="lokasi" id="lokasi" type="text" class="form-control" value="{{ old('lokasi') }}" required autofocus>
-                                    
-                                    <label class="mt-2" for="klasifikasi_pegawai">Klasifikasi Pegawai</label>
-                                    <select name="klasifikasi_pegawai" id="klasifikasi_pegawai" type="text"
+                                    <label class="mt-2" for="klasifikasi_karyawan">Klasifikasi karyawan</label>
+                                    <select name="klasifikasi_karyawan" id="klasifikasi_karyawan" type="text"
                                         class="form-control select2">
-                                        <option value="Tetap" @if(old('klasifikasi_pegawai') == 'Tetap') selected @endif>Tetap</option>
-                                        <option value="Kontrak" @if(old('klasifikasi_pegawai') == 'Kontrak') selected @endif>Kontrak</option>
-                                        <option value="Harian" @if(old('klasifikasi_pegawai') == 'Harian') selected @endif>Harian</option>
+                                        <option value="Tetap" @if(old('klasifikasi_karyawan') == 'Tetap') selected @endif>Tetap</option>
+                                        <option value="Kontrak" @if(old('klasifikasi_karyawan') == 'Kontrak') selected @endif>Kontrak</option>
+                                        <option value="Harian" @if(old('klasifikasi_karyawan') == 'Harian') selected @endif>Harian</option>
                                     </select>
                                     
                                     <label class="mt-2" class=""for="klasifikasi_gaji">Klasifikasi Gaji</label>
@@ -147,7 +145,6 @@
                                     <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
                                     <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes') }}">
                                     
-                                    
                                     <label class="mt-2" for="riwayat_pekerjaan">Riwayat Pekerjaan</label>
                                     <input name="riwayat_pekerjaan" id="riwayat_pekerjaan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pekerjaan') }}">
                                     
@@ -157,9 +154,18 @@
                                     <label class="mt-2" for="riwayat_pelanggaran">Riwayat Pelanggaran</label>
                                     <input name="riwayat_pelanggaran" id="riwayat_pelanggaran" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pelanggaran') }}">
 
-                                    <label for="foto">Foto</label>                                    
-                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
+                                    <label class="mt-2" for="keterangan">Keterangan</label>
+                                    <input name="keterangan" id="keterangan" type="text" class="form-control" value="{{ old('keterangan') }}">
+                                    
+                                    <label class="mt-2" for="tanggal_keluar">Tanggal Keluar</label>
+                                    <input name="tanggal_keluar" id="tanggal_keluar" type="date" class="form-control" value="{{ old('tanggal_keluar') }}">
+
+                                    <label class="mt-2" for="foto">Foto</label>
+                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">                                  
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
+                                    
+                                    <label class="mt-2" for="berkas">Berkas</label>                                  
+                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
                                 </div>
                             </div>
                         </div>

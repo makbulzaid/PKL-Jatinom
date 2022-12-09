@@ -5,25 +5,25 @@
 @endsection
 
 @section('header')
-    <h1>Edit Karyawan</h1>
+    <h1>{{ $employees->nama }}</h1>
 
     <div class="section-header-breadcrumb">
         <a href="#" class="btn btn-lg icon-left btn-secondary mr-2"><i class="fas fa-edit"></i> Edit</a>
         
-        @if($employees->keluar_jig == 1)
+        @if($employees->keluar == 1)
         <form action="/employee/{{ $employees->nomor_induk }}" method="post" style="display: inline;">
             @method('delete')
             @csrf
-            <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+            <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Menghapus Data Permanen?')"><i class="fas fa-times"></i> Hapus</button>
         </form>  
         @else    
         <form action="/employee/keluar/{{ $employees->nomor_induk }}" method="post"
             style="display: inline;">
             @method('put')
             @csrf
-            <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+            <input type="hidden" value="1" name="keluar" id="keluar">
             <input type="hidden" value="{{ $employees->nomor_induk }}" name="nomor_induk" id="nomor_induk">
-            <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+            <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Memindahkan Data ke Arsip?')"><i class="fas fa-times"></i> Hapus</button>
         </form>
         @endif
     </div>
@@ -122,6 +122,11 @@
                                     <label class="mt-2" for="jabatan">Jabatan</label>
                                     <input name="jabatan" id="jabatan" type="text" class="form-control" value="{{ old('jabatan', $employees->jabatan) }}" required autofocus>
                                     
+                                    <label class="mt-2"for="bagian">Bagian</label>
+                                    <input name="bagian" id="bagian" type="text" class="form-control" value="{{ old('bagian', $employees->bagian) }}" required autofocus>    
+                                    
+                                    <label class="mt-2" for="lokasi">Lokasi</label>
+                                    <input name="lokasi" id="lokasi" type="text" class="form-control" value="{{ old('lokasi', $employees->lokasi) }}" required autofocus>
                                 </div>
                             </div>
                         </div>
@@ -132,18 +137,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    
-                                    <label class="mt-2"for="bagian">Bagian</label>
-                                    <input name="bagian" id="bagian" type="text" class="form-control" value="{{ old('bagian', $employees->bagian) }}" required autofocus>    
-                                    
-                                    <label class="mt-2" for="lokasi">Lokasi</label>
-                                    <input name="lokasi" id="lokasi" type="text" class="form-control" value="{{ old('lokasi', $employees->lokasi) }}" required autofocus>
-                                    
-                                    <label class="mt-2" for="klasifikasi_pegawai">Klasifikasi Pegawai</label>
-                                    <select name="klasifikasi_pegawai" id="klasifikasi_pegawai" type="text" class="form-control select2" required autofocus>
-                                        <option value="Tetap" @if(old('klasifikasi_pegawai', $employees->klasifikasi_pegawai) == 'Tetap') selected @endif>Tetap</option>
-                                        <option value="Kontrak" @if(old('klasifikasi_pegawai', $employees->klasifikasi_pegawai) == 'Kontrak') selected @endif>Kontrak</option>
-                                        <option value="Harian" @if(old('klasifikasi_pegawai', $employees->klasifikasi_pegawai) == 'Harian') selected @endif>Harian</option>
+                                    <label class="mt-2" for="klasifikasi_karyawan">Klasifikasi karyawan</label>
+                                    <select name="klasifikasi_karyawan" id="klasifikasi_karyawan" type="text" class="form-control select2" required autofocus>
+                                        <option value="Tetap" @if(old('klasifikasi_karyawan', $employees->klasifikasi_karyawan) == 'Tetap') selected @endif>Tetap</option>
+                                        <option value="Kontrak" @if(old('klasifikasi_karyawan', $employees->klasifikasi_karyawan) == 'Kontrak') selected @endif>Kontrak</option>
+                                        <option value="Harian" @if(old('klasifikasi_karyawan', $employees->klasifikasi_karyawan) == 'Harian') selected @endif>Harian</option>
                                     </select>
                                     
                                     
@@ -170,23 +168,37 @@
                                         
                                     <label class="mt-2" for="tanggal_keluar_bpjskes">Tanggal Keluar BPJS Kesehatan</label>
                                     <input name="tanggal_keluar_bpjskes" id="tanggal_keluar_bpjskes" type="date" class="form-control" value="{{ old('tanggal_keluar_bpjskes', $employees->tanggal_keluar_bpjskes) }}">
-
+                                    
                                     <label class="mt-2" for="riwayat_pekerjaan">Riwayat Pekerjaan</label>
                                     <input name="riwayat_pekerjaan" id="riwayat_pekerjaan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pekerjaan', $employees->riwayat_pekerjaan) }}">
-
+                                    
                                     <label class="mt-2" for="riwayat_pendidikan">Riwayat Pendidikan</label>
                                     <input name="riwayat_pendidikan" id="riwayat_pendidikan" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pendidikan', $employees->riwayat_pendidikan) }}">
-
+                                    
                                     <label class="mt-2" for="riwayat_pelangggaran">Riwayat Pelanggaran</label>
                                     <input name="riwayat_pelanggaran" id="riwayat_pelanggaran" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pelanggaran', $employees->riwayat_pelanggaran) }}">
+                                    
+                                    <label class="mt-2" for="keterangan">Keterangan</label>
+                                    <input name="keterangan" id="keterangan" type="text" class="form-control" value="{{ old('keterangan', $employees->keterangan) }}">
+                                    
+                                    <label class="mt-2" for="tanggal_keluar">Tanggal Keluar</label>
+                                    <input name="tanggal_keluar" id="tanggal_keluar" type="date" class="form-control" value="{{ old('tanggal_keluar', $employees->tanggal_keluar) }}">
 
-                                    <label for="foto">Foto</label>
+                                    <label class="mt-2" for="foto">Foto</label>
                                     @if ($employees->foto)
                                     <img src="{{ asset('storage/' . $employees->foto) }}" class="img-preview img-fluid mb-2 p-0 col-sm-3 d-block">
                                     @else
                                     <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
                                     @endif                                    
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
+                                    
+                                    <label class="mt-2" for="berkas">Berkas</label>
+                                    @if ($employees->berkas)
+                                    {{-- <img src="{{ asset('storage/' . $employees->berkas) }}" class="img-preview img-fluid mb-2 p-0 col-sm-3 d-block"> --}}
+                                    @else
+                                    {{-- <img class="img-preview img-fluid mb-2 p-0 col-sm-3"> --}}
+                                    @endif                                    
+                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
                                 </div>
                             </div>
                         </div>

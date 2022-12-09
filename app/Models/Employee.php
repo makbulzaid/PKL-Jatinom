@@ -24,9 +24,6 @@ class Employee extends Model
                     $query->where('slug_company', $company);
                 });
             }
-            else {
-                false;
-            }
         });
     }
     

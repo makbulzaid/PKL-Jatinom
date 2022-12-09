@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LandController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,12 @@ Route::get('/', function(){
 
 Route::put('/employee/keluar/{nomor_induk}', [EmployeeController::class, 'keluar'])->middleware('auth');
 Route::resource('/employee', EmployeeController::class)->scoped(['employee' => 'nomor_induk'])->middleware('auth');
+
+Route::put('/land/arsip/{nomor_sertifikat}', [LandController::class, 'arsip'])->middleware('auth');
+Route::resource('/land', LandController::class)->scoped(['land' => 'nomor_sertifikat'])->middleware('auth');
+
+Route::put('/vehicle/arsip/{nomor_bpkb}', [VehicleController::class, 'arsip'])->middleware('auth');
+Route::resource('/vehicle', VehicleController::class)->scoped(['vehicle' => 'nomor_bpkb'])->middleware('auth');
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register')->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store']);

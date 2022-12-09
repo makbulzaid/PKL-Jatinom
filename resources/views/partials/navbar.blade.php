@@ -1,24 +1,45 @@
 <div class="navbar-bg"></div>
 <nav class="navbar navbar-expand-lg main-navbar">
-    <form action="/employee" class="form-inline mr-auto">
-        <ul class="navbar-nav mr-3">
-            <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-            <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
-                        class="fas fa-search"></i></a></li>
-        </ul>
-
-        <!-- Search -->
-        @if (request('company'))
-            <input type="hidden" name="company" value="{{ request('company') }}">
-        @endif
-
-        <div class="search-element">
-            <input class="form-control" value="{{ request('search') }}" type="search" placeholder="Search" aria-label="Search" data-width="250"
-                name="search">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-            {{-- <div class="search-backdrop"></div> --}}
-        </div>
-    </form>
+    @if( Request::is('employee*') )
+        <form action="/employee" class="form-inline mr-auto">
+            <ul class="navbar-nav mr-3">
+                <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+                <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
+                    class="fas fa-search"></i></a></li>
+                </ul>
+                
+                <!-- Search -->
+                @if (request('company'))
+                <input type="hidden" name="company" value="{{ request('company') }}">
+                @endif
+                
+                <div class="search-element">
+                    <input class="form-control" value="{{ request('search') }}" type="search" placeholder="Search" aria-label="Search" data-width="250"
+                    name="search">
+                    <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                    {{-- <div class="search-backdrop"></div> --}}
+                </div>
+            </form>
+    @elseif( Request::is('land*') )
+        <form action="/land" class="form-inline mr-auto">
+            <ul class="navbar-nav mr-3">
+                <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
+                <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
+                            class="fas fa-search"></i></a></li>
+            </ul>
+    
+            <!-- Search -->
+            @if (request('owner'))
+                <input type="hidden" name="owner" value="{{ request('owner') }}">
+            @endif
+    
+            <div class="search-element">
+                <input class="form-control" value="{{ request('search') }}" type="search" placeholder="Search" aria-label="Search" data-width="250" name="search">
+                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+                {{-- <div class="search-backdrop"></div> --}}
+            </div>
+        </form>
+    @endif
 
     <!-- Navbar Kanan -->
     <ul class="navbar-nav navbar-right">

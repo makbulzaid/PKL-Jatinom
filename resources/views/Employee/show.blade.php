@@ -1,7 +1,7 @@
     @extends('layouts.main')
 
     @section('title')
-        {{ $employees->nama }}
+        {{ $header }}
     @endsection
 
     @section('extracss')
@@ -9,32 +9,30 @@
     @endsection
 
     @section('header')
-        <h1>Detail Karyawan</h1>
+        <h1>{{ $header }}</h1>
         <div class="section-header-breadcrumb">
-            <a href="/employee/{{ $employees->nomor_induk }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i
-                    class="fas fa-edit"></i> Edit</a>
+            <a href="/employee/{{ $employees->nomor_induk }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i class="fas fa-edit"></i> Edit</a>
             
-            @if($employees->keluar_jig == 1)
+            @if($employees->keluar == 1)
             <form action="/employee/{{ $employees->nomor_induk }}" method="post" style="display: inline;">
                 @method('delete')
                 @csrf
-                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Menghapus Data Permanen?')"><i class="fas fa-times"></i> Hapus</button>
             </form>  
             @else    
             <form action="/employee/keluar/{{ $employees->nomor_induk }}" method="post"
                 style="display: inline;">
                 @method('put')
                 @csrf
-                <input type="hidden" value="1" name="keluar_jig" id="keluar_jig">
+                <input type="hidden" value="1" name="keluar" id="keluar">
                 <input type="hidden" value="{{ $employees->nomor_induk }}" name="nomor_induk" id="nomor_induk">
-                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Are you sure')"><i class="fas fa-times"></i> Hapus</button>
+                <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Memindahkan Data ke Arsip?')"><i class="fas fa-times"></i> Hapus</button>
             </form>
             @endif
         </div>
     @endsection
 
     @section('container')
-
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -50,7 +48,7 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <td>Foto</td>
+                                <th>Foto</th>
                                 <td> <img src="{{ asset('storage/' . $employees->foto) }}"></td>
                             </tr>
                             <tr>
@@ -130,6 +128,10 @@
                                 <td>{{ $employees->tanggal_masuk }}</td>
                             </tr>
                             <tr>
+                                <th>Masa Kerja</th>
+                                <td>{{ $masakerja }} Tahun</td>
+                            </tr>
+                            <tr>
                                 <th>Perusahaan</th>
                                 <td>
                                     @foreach ($employees->companies as $company)
@@ -152,13 +154,8 @@
                                 <td>{{ $employees->lokasi }}</td>
                             </tr>
                             <tr>
-                                <th>Masa Kerja</th>
-                                <td>{{ $masakerja }} Tahun</td>
-
-                            </tr>
-                            <tr>
-                                <th>Klasifikasi Pegawai</th>
-                                <td>{{ $employees->klasifikasi_pegawai }}</td>
+                                <th>Klasifikasi Karyawan</th>
+                                <td>{{ $employees->klasifikasi_karyawan }}</td>
                             </tr>
                             <tr>
                                 <th>Klasifikasi Gaji</th>
@@ -205,10 +202,6 @@
                                 <td></td>
                             </tr>
                             <tr>
-                                <th>Tanggal Keluar Jatinom Indah Group</th>
-                                <td>{{ $employees->tanggal_keluar_bpjskes }}</td>
-                            </tr>
-                            <tr>
                                 <th>Riwayat Pekerjaan</th>
                                 <td>
                                     @foreach (explode(',', $employees->riwayat_pekerjaan) as $riwayat_pekerjaan)
@@ -237,6 +230,14 @@
                                     <br>
                                     @endforeach
                                 </td>
+                            </tr>
+                            <tr>
+                                <th>Keterangan</th>
+                                <td>{{ $employees->keterangan }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal Keluar Jatinom Indah Group</th>
+                                <td>{{ $employees->tanggal_keluar_bpjskes }}</td>
                             </tr>
                         </tbody>
                     </table>

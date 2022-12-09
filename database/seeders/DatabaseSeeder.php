@@ -6,7 +6,9 @@ namespace Database\Seeders;
 
 use App\Models\Company;
 use App\Models\Employee;
+use App\Models\Land;
 use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password2')
         ]);
         
-        Employee::factory(2500)->create();
+        Employee::factory(250)->create();
         
         Company::create([
             'nama_company' => 'Jatinom Indah Farm',
@@ -81,18 +83,21 @@ class DatabaseSeeder extends Seeder
             'link' => '/employee?company=JUP'
         ]);
 
-        for ($i=1; $i < 2500; $i++) { 
+        for ($i=1; $i < 250; $i++) { 
             DB::table('company_employee')->insert([
                 'employee_id' => $i,
                 'company_id' => rand(1, 8)
             ]);
         };
 
-        for ($i=1; $i < 500; $i++) { 
+        for ($i=1; $i < 100; $i++) { 
             DB::table('company_employee')->insert([
-                'employee_id' => rand(1, 500),
+                'employee_id' => rand(1, 100),
                 'company_id' => rand(1, 8)
             ]);
         };
+
+        Land::factory(100)->create();
+        Vehicle::factory(100)->create();
     }
 }
