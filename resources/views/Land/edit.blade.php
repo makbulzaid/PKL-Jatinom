@@ -119,17 +119,28 @@
                                     <label class="mt-2" for="tanggal_dijual">Tanggal Dijual</label>
                                     <input name="tanggal_dijual" id="tanggal_dijual" type="date" class="form-control" value="{{ old('tanggal_dijual', $lands->tanggal_dijual) }}" autofocus>
                                     
-                                    <label class="mt-2" for="foto">Foto</label>                                    
+                                    <label class="mt-2" for="foto">Foto</label>
                                     @if ($lands->foto)
                                     <img src="{{ asset('storage/' . $lands->foto) }}" class="img-preview img-fluid mb-2 p-0 col-sm-3 d-block">
                                     @else
                                     <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
-                                    @endif
+                                    @endif                                    
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
-
-                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>                                    
-                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
                                     
+                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>
+                                    <div class="output">
+                                        @if ($lands->berkas)
+                                        @php
+                                        $berkas = explode(',', $lands->berkas);
+                                        $nama_berkass = explode(',', $lands->nama_berkas);
+                                        @endphp
+                                        @for ($i=0; $i<count($berkas); $i++)
+                                        <a href="/employee/berkas?berkas={{ $berkas[$i] }}" class="badge badge-info mb-2" type="button"><i class="far fa-file-alt"></i><span> {{ $nama_berkass[$i] }}</span></a><br>
+                                        @endfor
+                                        @endif                                    
+                                    </div>
+                                    <div class="outputt" style="display: none"></div>
+                                    <input name="berkas[]" id="berkas" type="file" class="form-control" onchange="previewPdf()" style="padding: 7px 15px" autofocus multiple>
                                 </div>
                             </div>
                         </div>
@@ -154,6 +165,19 @@
         oFReader.readAsDataURL(foto.files[0]);
         oFReader.onload = function(oFREvent) {
             imgPreview.src = oFREvent.target.result;
+        }
+    }
+    function previewPdf(){
+        const fileInput = document.querySelector("#berkas");
+        const div = document.querySelector('.output');
+        const divv = document.querySelector('.outputt');
+
+        div.style.display = 'none';
+        divv.style.display = 'block';
+
+        $(".outputt").empty();
+        for (const file of fileInput.files) {
+            $(".outputt").append("<a href='#' class='badge badge-success mb-2' type='button'>"+file.name+"<a><br>");
         }
     }
 </script>

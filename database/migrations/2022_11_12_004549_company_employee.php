@@ -11,6 +11,15 @@ return new class extends Migration
      *
      * @return void
      */
+    // public function up()
+    // {
+    //     Schema::create('company_employee', function (Blueprint $table) {
+    //         $table->id();
+    //         $table -> foreignId('employee_id')->constrained('employees')->cascadeOnDelete();
+    //         $table -> foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+    //         $table->timestamps();
+    //     });
+    // }
     public function up()
     {
         Schema::create('company_employee', function (Blueprint $table) {

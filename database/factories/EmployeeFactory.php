@@ -24,7 +24,6 @@ class EmployeeFactory extends Factory
             'tanggal_lahir' => fake()->date(),
             'alamat' => fake()->streetAddress(),
             'status' => fake()->randomElement(['Menikah', 'Janda/Duda', 'Belum Menikah']),
-            'jumlah_anak' => rand(0, 5),
             'nama_ibu' => fake()->name('female'),
             'pendidikan' => fake()->randomElement(['Tidak Bersekolah', 'SD', 'SMP', 'SMA', 'D1/D2/D3', 'D4/S1', 'S2', 'S3']),
             'golongan_darah' => fake()->randomElement(['O', 'A', 'B', 'AB']),

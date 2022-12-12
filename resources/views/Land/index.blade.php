@@ -13,6 +13,7 @@
     <h1>{{ $header }}</h1>
     <div class="section-header-breadcrumb">
         <a href="/land/create" class="btn btn-lg icon-left btn-primary"><i class="fas fa-edit"></i> Tambah</a>
+        <button class="btn btn-success btn-lg icon-lect ml-2" data-toggle="modal" data-target="#Modal"><i class="fas fa-edit"></i> Import</button>
     </div>
 @endsection
 
@@ -116,10 +117,41 @@
                 </table>
             </div>
             <div class="ml-3">
-                {{-- {{ $employees->links() }} --}}
+                {{-- {{ $lands->links() }} --}}
             </div>
         </div>
     </div>
+@endsection
+
+@section('modal')
+<div class="modal fade" tabindex="-1" role="dialog" id="Modal">
+    <div class="modal-dialog" role="document">
+        <form action="/land/import" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Import Data Tanah</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group mt-4 ml-2">
+                    <input name="import" id="import" type="file" class="form-control" style="padding: 7px 15px">
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="submit">Import</button>
+              </div>
+            </div>
+        </form>
+    </div>
+  </div>
 @endsection
 
 @section('extrajs') 
@@ -162,7 +194,7 @@
                 dom: 'Bfrtip',
                 "columnDefs": [{
                     "visible": false,
-                    "targets": [6, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17]
+                    "targets": [5, 6, 9, 10, 11, 12, 13, 14, 15, 16, 17]
                 },
                 {
                     sortable: false,

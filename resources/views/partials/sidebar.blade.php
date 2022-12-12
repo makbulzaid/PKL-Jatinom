@@ -17,7 +17,7 @@
                     <li class="@if ($header == 'Jatinom Indah Grup') active @endif"><a class="nav-link" href="/employee">Jatinom Indah Grup</a></li>
                     <hr style="width:62%; margin-left:23%; margin-top:1.5px; margin-bottom:1.5px">
                     @foreach ($companies as $company)
-                    <li class="@if ($header == $company->nama_company) active @endif"><a class="nav-link" href="{{ $company->link }}">{{ $company->nama_company }}</a></li>
+                    <li class="@if ($header == $company->nama_company) active @endif"><a class="nav-link" href="/employee?company={{ $company->slug_company }}">{{ $company->nama_company }}</a></li>
                     @endforeach
                     <hr style="width:62%; margin-left:23%; margin-top:1.5px; margin-bottom:1.5px">
                     <li class="@if ($header == 'Arsip Karyawan') active @endif"><a class="nav-link" href="/employee?company=arsip">Arsip Karyawan</a></li>
@@ -30,8 +30,10 @@
                     <hr style="width:62%; margin-left:23%; margin-top:1.5px; margin-bottom:1.5px">
                     @foreach ($landside as $land)
                     @if($land->slug_pemilik !== $landtmp)
+                    @if($land->status !== 6)
                         <li class="@if ($header == $land->pemilik) active @endif"><a class="nav-link" href="/land?owner={{ $land->slug_pemilik }}">{{ $land->pemilik }}</a></li>
                         @php($landtmp = $land->slug_pemilik)
+                        @endif
                     @endif
                     @endforeach
                     <hr style="width:62%; margin-left:23%; margin-top:1.5px; margin-bottom:1.5px">

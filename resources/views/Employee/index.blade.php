@@ -13,6 +13,7 @@
     <h1>{{ $header }}</h1>
     <div class="section-header-breadcrumb">
         <a href="/employee/create" class="btn btn-lg icon-left btn-primary"><i class="fas fa-edit"></i> Tambah</a>
+        <button class="btn btn-success btn-lg icon-lect ml-2" data-toggle="modal" data-target="#Modal"><i class="fas fa-edit"></i> Import</button>
     </div>
 @endsection
 
@@ -38,7 +39,8 @@
                             <th>Tanggal Lahir</th>
                             <th>Alamat</th>
                             <th>Status</th>
-                            <th>Jumlah Anak</th>
+                            <th>Anak Laki-laki</th>
+                            <th>Anak Perempuan</th>
                             <th>Nama Ibu</th>
                             <th>Pendidikan</th>
                             <th>Golongan Darah</th>
@@ -63,6 +65,7 @@
                             <th>Riwayat Pelanggaran</th>
                             <th>Keterangan</th>
                             <th>Tanggal Keluar</th>
+                            <th>Alasan Keluar</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -76,7 +79,8 @@
                                 <td>{!! $employee->tanggal_lahir !!}</td>
                                 <td>{!! $employee->alamat !!}</td>
                                 <td>{{ $employee->status }}</td>
-                                <td>{{ $employee->jumlah_anak }}</td>
+                                <td>{{ $employee->anak_laki }}</td>
+                                <td>{{ $employee->anak_perempuan }}</td>
                                 <td>{{ $employee->nama_ibu }}</td>
                                 <td>{{ $employee->pendidikan }}</td>
                                 <td>{{ $employee->golongan_darah }}</td>
@@ -121,6 +125,7 @@
                                 </td>
                                 <td>{{ $employee->keterangan }}</td>
                                 <td>{{ $employee->tanggal_keluar }}</td>
+                                <td>{{ $employee->alasan_keluar }}</td>
                                 <td>
                                     {{-- <a href="/employee/{{ $employee->nomor_induk }}"
                                         class="btn btn-icon icon-left btn-info"><i class="fas fa-info-circle"></i>
@@ -154,6 +159,37 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('modal')
+<div class="modal fade" tabindex="-1" role="dialog" id="Modal">
+    <div class="modal-dialog" role="document">
+        <form action="/employee/import" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Import Data Karyawan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group mt-4 ml-2">
+                    <input name="import" id="import" type="file" class="form-control" style="padding: 7px 15px">
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="submit">Import</button>
+              </div>
+            </div>
+        </form>
+    </div>
+  </div>
 @endsection
 
 @section('extrajs') 
@@ -196,7 +232,7 @@
                 dom: 'Bfrtip',
                 "columnDefs": [{
                     "visible": false,
-                    "targets": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+                    "targets": [2, 3, 4, 5,6, 7, 8, 9, 10, 11, 13, 15, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
                 },
                 {
                     sortable: false,

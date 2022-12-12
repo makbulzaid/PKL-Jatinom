@@ -14,7 +14,7 @@ class Vehicle extends Model
     public function scopeFilter($query, $filter)
     {
         $query->when($filter['search'] ?? false, function ($query, $search) {
-            return $query->where('nomor_bpkb', 'like', '%' . $search . '%');
+            return $query->where('nomor_polisi_bpkb', 'like', '%' . $search . '%');
         });
         
         $query->when($filter['status'] ?? false, function ($query, $status) {

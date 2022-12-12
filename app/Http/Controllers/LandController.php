@@ -7,10 +7,12 @@ use App\Models\Land;
 use App\Models\Vehicle;
 use App\Http\Requests\StoreLandRequest;
 use App\Http\Requests\UpdateLandRequest;
+use App\Imports\LandImportC;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LandController extends Controller
 {
@@ -98,20 +100,25 @@ class LandController extends Controller
             //dijual
             'tanggal_dijual' => 'nullable',
             //file
-            'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:5120',
+            'foto' => 'image|file|max:2056|nullable',
+            'berkas.*' => 'file|mimes:pdf|max:5120',
+            'nama_berkas' => 'nullable',
         ]);
 
         if($request->file('foto')){
             $validationData['foto'] = $request->file('foto')->store('foto-tanah', 'public');
         }
         if($request->file('berkas')){
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-tanah', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-tanah/'.$validationData['nomor_sertifikat'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
-
         
         $request = Land::create($validationData);
-        return redirect('/land')->with('success', 'Tanah telah ditambahkan!');
+        return redirect('/land')->with('success', 'Data tanah telah ditambahkan!');
     }
 
     /**
@@ -183,8 +190,9 @@ class LandController extends Controller
             //dijual
             'tanggal_dijual' => 'nullable',
             //file
-            'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:5120',
+            'foto' => 'image|file|max:2056|nullable',
+            'berkas.*' => 'file|mimes:pdf|max:5120',
+            'nama_berkas' => 'nullable',
         ]);
 
         if($request->file('foto')){
@@ -195,13 +203,21 @@ class LandController extends Controller
         }
         if($request->file('berkas')){
             if($land->berkas){
-                Storage::disk('public')->delete($land->berkas);
+                $arr3 = explode(',', $land->berkas);
+                for ($i=0; $i < count($arr3); $i++) { 
+                    Storage::disk('public')->delete($arr3[$i]);
+                }
             }
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-tanah', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-tanah/'.$validationData['nomor_sertifikat'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
         
         $land->update($validationData);
-        return redirect('/land')->with('success', 'Tanah telah diedit!');
+        return redirect('/land')->with('success', 'Data tanah telah diedit!');
     }
 
     /**
@@ -216,7 +232,7 @@ class LandController extends Controller
             Storage::disk('public')->delete($land->foto);
         }
         if($land->berkas){
-            Storage::disk('public')->delete($land->berkas);
+            Storage::disk('public')->deleteDirectory('berkas-tanah/'.$land->nomor_sertifikat);
         }
         
         Land::destroy($land->id);
@@ -231,6 +247,24 @@ class LandController extends Controller
         $arsip = Arr::add($arsip, 'tanggal_dijual', Carbon::now()->toDateString());
 
         Land::where('nomor_sertifikat', $nomor_sertifikat)->update($arsip);
-        return redirect('/land')->with('success', 'Tanah telah diarsipkan!');
+        return redirect('/land')->with('success', 'Data tanah telah diarsipkan!');
+    }
+
+    public function import(Request $request){
+        
+        Excel::import(new LandImportC, $request->file('import'));
+                
+        return redirect('/land')->with('success', 'Data Tanah telah diimport!');
+    }
+
+    public function berkas(Request $request, Land $land){
+        $arr3 = explode(',', $land->berkas);
+        for ($i=0; $i < count($arr3); $i++) { 
+            if($arr3[$i] == $request['berkas']){
+                $path = 'storage/'.$arr3[$i];
+            }
+        }
+        
+        return response()->file($path);
     }
 }

@@ -25,8 +25,8 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label class="mt-2" for="nomor_bpkb">Nomor BPKB</label>
-                                    <input name="nomor_bpkb" id="nomor_bpkb" type="text" class="form-control" value="{{ old('nomor_bpkb')}}" required autofocus>
+                                    <label class="mt-2" for="nomor_polisi_bpkb">Nomor Polisi BPKB</label>
+                                    <input name="nomor_polisi_bpkb" id="nomor_polisi_bpkb" type="text" class="form-control" value="{{ old('nomor_polisi_bpkb') }}" required autofocus>
                                     
                                     <label class="mt-2" for="status">Status</label>
                                     <select name="status" id="status" type="text" class="form-control select2" required autofocus>
@@ -34,10 +34,7 @@
                                         <option value="2" @if(old('status') == '2') selected @endif>Peminjaman</option>
                                         <option value="3" @if(old('status') == '3') selected @endif>Penitipan</option>
                                         <option value="4" @if(old('status') == '4') selected @endif>Arsip</option>
-                                    </select>
-                                    
-                                    <label class="mt-2" for="nomor_polisi_bpkb">Nomor Polisi BPKB</label>
-                                    <input name="nomor_polisi_bpkb" id="nomor_polisi_bpkb" type="text" class="form-control" value="{{ old('nomor_polisi_bpkb') }}" required autofocus>
+                                    </select>                                    
                                     
                                     <label class="mt-2" for="nomor_polisi_lama">Nomor Polisi Lama</label>
                                     <input name="nomor_polisi_lama" id="nomor_polisi_lama" type="text" class="form-control" value="{{ old('nomor_polisi_lama') }}" autofocus>
@@ -70,7 +67,7 @@
                                     <input name="bulan_jatuh_tempo" id="bulan_jatuh_tempo" type="text" class="form-control" value="{{ old('bulan_jatuh_tempo') }}" required autofocus>
 
                                     <label class="mt-2" for="bagian_lokasi">Divisi/Lokasi</label>
-                                    <input name="bagian_lokasi" id="bagian_lokasi" type="text" class="form-control" value="{{ old('bagian_lokasi') }}" required autofocus>
+                                    <input name="bagian_lokasi" id="bagian_lokasi" type="text" class="form-control" value="{{ old('bagian_lokasi') }}" autofocus>
                                 </div>
                             </div>
                         </div>
@@ -81,6 +78,9 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
+                                    <label class="mt-2" for="riwayat">Riwayat</label>
+                                    <input name="riwayat" id="riwayat" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat') }}">
+                                    
                                     <label class="mt-2" for="nama_peminjaman">Nama Peminjaman</label>
                                     <input name="nama_peminjaman" id="nama_peminjaman" type="text" class="form-control" value="{{ old('nama_peminjaman') }}" autofocus>
                                     
@@ -111,12 +111,13 @@
                                     <label class="mt-2" for="tanggal_dijual">Tanggal Dijual</label>
                                     <input name="tanggal_dijual" id="tanggal_dijual" type="date" class="form-control" value="{{ old('tanggal_dijual') }}" autofocus>
                                     
-                                    <label class="mt-2" for="foto">Foto</label>                                    
-                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
+                                    <label class="mt-2" for="foto">Foto</label>
+                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">                                  
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
-
-                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>                                    
-                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
+                                    
+                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>
+                                    <div class="outputt" style="display: none"></div>                                  
+                                    <input name="berkas[]" id="berkas" type="file" class="form-control" onchange="previewPdf()" style="padding: 7px 15px" autofocus multiple>
                                 </div>
                             </div>
                         </div>
@@ -141,6 +142,16 @@
         oFReader.readAsDataURL(foto.files[0]);
         oFReader.onload = function(oFREvent) {
             imgPreview.src = oFREvent.target.result;
+        }
+    }
+    function previewPdf(){
+        const fileInput = document.querySelector("#berkas");
+        const divv = document.querySelector('.outputt');
+
+        divv.style.display = 'block';
+        $(".outputt").empty();
+        for (const file of fileInput.files) {
+            $(".outputt").append("<a href='#' class='badge badge-success mb-2' type='button'>"+file.name+"<a><br>");
         }
     }
 </script>

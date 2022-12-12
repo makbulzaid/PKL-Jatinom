@@ -99,12 +99,13 @@
                                     <label class="mt-2" for="tanggal_dijual">Tanggal Dijual</label>
                                     <input name="tanggal_dijual" id="tanggal_dijual" type="date" class="form-control" value="{{ old('tanggal_dijual') }}" autofocus>
 
-                                    <label class="mt-2" for="foto">Foto</label>                                    
-                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">
+                                    <label class="mt-2" for="foto">Foto</label>
+                                    <img class="img-preview img-fluid mb-2 p-0 col-sm-3">                                  
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
-
-                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>                                    
-                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
+                                    
+                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>
+                                    <div class="outputt" style="display: none"></div>                                  
+                                    <input name="berkas[]" id="berkas" type="file" class="form-control" onchange="previewPdf()" style="padding: 7px 15px" autofocus multiple>
                                 </div>
                             </div>
                         </div>
@@ -129,6 +130,16 @@
         oFReader.readAsDataURL(foto.files[0]);
         oFReader.onload = function(oFREvent) {
             imgPreview.src = oFREvent.target.result;
+        }
+    }
+    function previewPdf(){
+        const fileInput = document.querySelector("#berkas");
+        const divv = document.querySelector('.outputt');
+
+        divv.style.display = 'block';
+        $(".outputt").empty();
+        for (const file of fileInput.files) {
+            $(".outputt").append("<a href='#' class='badge badge-success mb-2' type='button'>"+file.name+"<a><br>");
         }
     }
 </script>

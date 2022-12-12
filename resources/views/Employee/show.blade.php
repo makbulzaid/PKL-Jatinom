@@ -49,7 +49,25 @@
                             </tr>
                             <tr>
                                 <th>Foto</th>
-                                <td> <img src="{{ asset('storage/' . $employees->foto) }}"></td>
+                                <td> 
+                                    @if($employees->foto)
+                                    <img src="{{ asset('storage/' . $employees->foto) }}">
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Berkas</th>
+                                <td>
+                                    @if ($employees->berkas)
+                                    @php
+                                    $berkas = explode(',', $employees->berkas);
+                                    $nama_berkass = explode(',', $employees->nama_berkas);
+                                    @endphp
+                                    @for ($i=0; $i<count($berkas); $i++)
+                                    <a href="/employee/berkas?berkas={{ $berkas[$i] }}" class="badge badge-info mb-2" type="button"><i class="far fa-file-alt"></i><span> {{ $nama_berkass[$i] }}</span></a><br>
+                                    @endfor
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Nama</th>
@@ -80,8 +98,12 @@
                                 <td>{{ $employees->status }}</td>
                             </tr>
                             <tr>
-                                <th>Jumlah Anak</th>
-                                <td>{{ $employees->jumlah_anak }}</td>
+                                <th>Anak Laki-Laki</th>
+                                <td>{{ $employees->anak_laki }}</td>
+                            </tr>
+                            <tr>
+                                <th>Anak Perempuan</th>
+                                <td>{{ $employees->anak_perempuan }}</td>
                             </tr>
                             <tr>
                                 <th>Nama Ibu</th>
@@ -190,6 +212,14 @@
                                 <td></td>
                             </tr>
                             <tr>
+                                <th>Keterangan</th>
+                                <td>{{ $employees->keterangan }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -232,12 +262,16 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>Keterangan</th>
-                                <td>{{ $employees->keterangan }}</td>
+                                <th></th>
+                                <td></td>
                             </tr>
                             <tr>
                                 <th>Tanggal Keluar Jatinom Indah Group</th>
-                                <td>{{ $employees->tanggal_keluar_bpjskes }}</td>
+                                <td>{{ $employees->tanggal_keluar }}</td>
+                            </tr>
+                            <tr>
+                                <th>Alasan Keluar</th>
+                                <td>{{ $employees->alasan_keluar }}</td>
                             </tr>
                         </tbody>
                     </table>

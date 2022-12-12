@@ -17,25 +17,26 @@ return new class extends Migration
             $table->id();
             // informasi pribadi
             $table->string('nama');
-            $table->string('jenis_kelamin');
-            $table->string('tempat_lahir');
-            $table->date('tanggal_lahir');
-            $table->text('alamat');
-            $table->string('status');
-            $table->string('jumlah_anak');
-            $table->string('nama_ibu');
-            $table->string('pendidikan');
-            $table->string('golongan_darah');
-            $table->string('ktp');
+            $table->string('jenis_kelamin')->nullable();
+            $table->string('tempat_lahir')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('status')->nullable();
+            $table->string('anak_laki')->nullable();
+            $table->string('anak_perempuan')->nullable();
+            $table->string('nama_ibu')->nullable();
+            $table->string('pendidikan')->nullable();
+            $table->string('golongan_darah')->nullable();
+            $table->string('ktp')->nullable();
             $table->string('nomor_telepon')->nullable();
             // informasi pekerjaan
-            $table->string('nomor_induk');
-            $table->date('tanggal_masuk');
-            $table->string('bagian');
-            $table->string('jabatan');
-            $table->string('lokasi');
-            $table->string('klasifikasi_karyawan');
-            $table->string('klasifikasi_gaji');
+            $table->string('nomor_induk')->nullable();
+            $table->date('tanggal_masuk')->nullable();
+            $table->string('bagian')->nullable();
+            $table->string('jabatan')->nullable();
+            $table->string('lokasi')->nullable();
+            $table->string('klasifikasi_karyawan')->nullable();
+            $table->string('klasifikasi_gaji')->nullable();
             $table->string('nomor_bpjsket')->nullable();
             $table->date('tanggal_masuk_bpjsket')->nullable();
             $table->date('tanggal_keluar_bpjsket')->nullable();
@@ -48,11 +49,13 @@ return new class extends Migration
             $table->text('riwayat_pelanggaran')->nullable();
             $table->text('keterangan')->nullable();
             //keluar
-            $table->boolean('keluar')->default('0');
+            $table->boolean('keluar')->nullable()->default('0');
+            $table->string('alasan_keluar')->nullable();
             $table->date('tanggal_keluar')->nullable();
             //foto
             $table->string('foto')->nullable();
             $table->string('berkas')->nullable();
+            $table->string('nama_berkas')->nullable();
             $table->timestamps();
         });
     }

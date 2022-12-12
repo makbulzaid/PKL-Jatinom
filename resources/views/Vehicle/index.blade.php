@@ -13,6 +13,7 @@
     <h1>{{ $header }}</h1>
     <div class="section-header-breadcrumb">
         <a href="/vehicle/create" class="btn btn-lg icon-left btn-primary"><i class="fas fa-edit"></i> Tambah</a>
+        <button class="btn btn-success btn-lg icon-lect ml-2" data-toggle="modal" data-target="#Modal"><i class="fas fa-edit"></i> Import</button>
     </div>
 @endsection
 
@@ -32,9 +33,8 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Nomor BPKB</th>
-                            <th>Status</th>
                             <th>Nomor Polisi BPKB</th>
+                            <th>Status</th>
                             <th>Nomor Polisi Lama</th>
                             <th>Nama BPKB</th>
                             <th>Merk</th>
@@ -46,6 +46,7 @@
                             <th>Tanggal Jatuh Tempo</th>
                             <th>Bulan Jatuh Tempo</th>
                             <th>Divisi/Lokasi</th>
+                            <th>Riwayat</th>
                             <th>Nama Peminjaman</th>
                             <th>Tanggal Peminjaman</th>
                             <th>Tanggal Kembali Peminjaman</th>
@@ -63,7 +64,7 @@
                         @foreach ($vehicles as $vehicle)
                             <tr>
                                 <td></td>
-                                <td><a class="text-decoration-none" href="/vehicle/{{ $vehicle->nomor_bpkb }}"> {!! $vehicle->nomor_bpkb !!}</a></td>
+                                <td><a class="text-decoration-none" href="/vehicle/{{ $vehicle->nomor_polisi_bpkb }}"> {!! $vehicle->nomor_polisi_bpkb !!}</a></td>
                                 <td>
                                     @if($vehicle->status == 1)
                                     Aset
@@ -75,7 +76,6 @@
                                     Arsip
                                     @endif
                                 </td>
-                                <td>{{ $vehicle->nomor_polisi_bpkb }}</td>
                                 <td>{{ $vehicle->nomor_polisi_lama }}</td>
                                 <td>{{ $vehicle->nama_bpkb }}</td>
                                 <td>{{ $vehicle->merk }}</td>
@@ -87,6 +87,12 @@
                                 <td>{{ $vehicle->tanggal_jatuh_tempo }}</td>
                                 <td>{{ $vehicle->bulan_jatuh_tempo }}</td>
                                 <td>{{ $vehicle->bagian_lokasi }}</td>
+                                <td>
+                                    @foreach (explode(',', $vehicle->riwayat) as $riwayat)
+                                    {{ $riwayat }}
+                                    <br>
+                                    @endforeach
+                                </td>
                                 <td>{{ $vehicle->nama_peminjaman }}</td>
                                 <td>{{ $vehicle->tanggal_peminjaman }}</td>
                                 <td>{{ $vehicle->tanggal_kembali_peminjaman }}</td>
@@ -98,24 +104,24 @@
                                 <td>{{ $vehicle->keterangan }}</td>
                                 <td>{{ $vehicle->tanggal_dijual }}</td>
                                 <td>
-                                    {{-- <a href="/vehicle/{{ $vehicle->nomor_bpkb }}"
+                                    {{-- <a href="/vehicle/{{ $vehicle->nomor_polisi_bpkb }}"
                                         class="btn btn-icon icon-left btn-info"><i class="fas fa-info-circle"></i>
                                         Detail</a> --}}
-                                    <a href="/vehicle/{{ $vehicle->nomor_bpkb }}/edit"
+                                    <a href="/vehicle/{{ $vehicle->nomor_polisi_bpkb }}/edit"
                                         class="btn btn-icon icon-left btn-primary"><i class="far fa-edit"></i>  Edit </a>
                                     @if(request('status') == 'arsip')
-                                    <form action="/vehicle/{{ $vehicle->nomor_bpkb }}" method="post" style="display: inline;">
+                                    <form action="/vehicle/{{ $vehicle->nomor_polisi_bpkb }}" method="post" style="display: inline;">
                                         @method('delete')
                                         @csrf
                                         <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Menghapus Data Permanen?')"><i class="fas fa-times"></i> Hapus</button>
                                     </form>  
                                     @else    
-                                    <form action="/vehicle/arsip/{{ $vehicle->nomor_bpkb }}" method="post"
+                                    <form action="/vehicle/arsip/{{ $vehicle->nomor_polisi_bpkb }}" method="post"
                                         style="display: inline;">
                                         @method('put')
                                         @csrf
                                         <input type="hidden" value="4" name="status" id="status">
-                                        <input type="hidden" value="{{ $vehicle->nomor_bpkb }}" name="nomor_sertifikat" id="nomor_sertifikat">
+                                        <input type="hidden" value="{{ $vehicle->nomor_polisi_bpkb }}" name="nomor_sertifikat" id="nomor_sertifikat">
                                         <button class="btn btn-icon icon-left btn-danger" onclick="return confirm('Memindahkan Data ke Arsip?')"><i class="fas fa-times"></i> Hapus</button>
                                     </form>
                                     @endif
@@ -131,6 +137,37 @@
         </div>
     </div>
 @endsection
+
+@section('modal')
+<div class="modal fade" tabindex="-1" role="dialog" id="Modal">
+    <div class="modal-dialog" role="document">
+        <form action="/vehicle/import" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Import Data Kendaraan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                    <div class="input-group mt-4 ml-2">
+                    <input name="import" id="import" type="file" class="form-control" style="padding: 7px 15px">
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button class="btn btn-success" type="submit">Import</button>
+              </div>
+            </div>
+        </form>
+    </div>
+  </div>
+  @endsection
 
 @section('extrajs') 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
@@ -173,7 +210,7 @@
                 dom: 'Bfrtip',
                 "columnDefs": [{
                     "visible": false,
-                    "targets": [8, 9, 11, 12, 14, 15, 16, 17, 19, 20, 21, 22, 23]
+                    "targets": [3, 5, 6, 8, 9, 10,  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24]
                 },
                 {
                     sortable: false,

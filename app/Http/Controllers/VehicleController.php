@@ -7,10 +7,12 @@ use App\Models\Land;
 use App\Models\Vehicle;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
+use App\Imports\VehicleImportC;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleController extends Controller
 {
@@ -79,9 +81,8 @@ class VehicleController extends Controller
     public function store(StoreVehicleRequest $request)
     {
         $validationData = $request->validate([
-            'nomor_bpkb' => 'required',
-            'status' => 'required',
             'nomor_polisi_bpkb' => 'required',
+            'status' => 'required',
             'nomor_polisi_lama' => 'nullable',
             'nama_bpkb' => 'required',
             'merk' => 'required',
@@ -90,9 +91,10 @@ class VehicleController extends Controller
             'model' => 'required',
             'tahun' => 'required',
             'warna' => 'required',
-            'tanggal_jatuh_tempo' => 'required',
-            'bulan_jatuh_tempo' => 'required',
-            'bagian_lokasi' => 'required',
+            'tanggal_jatuh_tempo' => 'nullable',
+            'bulan_jatuh_tempo' => 'nullable',
+            'bagian_lokasi' => 'nullable',
+            'riwayat' => 'nullable',
             //peminjaman
             'nama_peminjaman' => 'nullable',
             'tanggal_peminjaman' => 'nullable',
@@ -108,19 +110,25 @@ class VehicleController extends Controller
             'tanggal_dijual' => 'nullable',
             //foto
             'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:2056',
+            'berkas.*' => 'file|mimes:pdf|max:2056',
+            'nama_berkas' => 'nullable',
         ]);
 
         if($request->file('foto')){
             $validationData['foto'] = $request->file('foto')->store('foto-kendaraan', 'public');
         }
         if($request->file('berkas')){
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-kendaraan', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-kendaraan/'.$validationData['nomor_polisi_bpkb'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
 
         
         $request = Vehicle::create($validationData);
-        return redirect('/vehicle')->with('success', 'Kendaraan telah ditambahkan!');
+        return redirect('/vehicle')->with('success', 'Data kendaraan telah ditambahkan!');
     }
 
     /**
@@ -151,7 +159,7 @@ class VehicleController extends Controller
     {
         return view ('vehicle.edit', [
             'vehicles' => $vehicle,
-            'header' => $vehicle->nomor_bpkb,
+            'header' => $vehicle->nomor_polisi_bpkb,
             //sidebar
             'companies' => Company::all(),
             'landside' => Land::all()->sortBy('pemilik'),
@@ -169,9 +177,8 @@ class VehicleController extends Controller
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
         $validationData = $request->validate([
-            'nomor_bpkb' => 'required',
-            'status' => 'required',
             'nomor_polisi_bpkb' => 'required',
+            'status' => 'required',
             'nomor_polisi_lama' => 'nullable',
             'nama_bpkb' => 'required',
             'merk' => 'required',
@@ -180,9 +187,10 @@ class VehicleController extends Controller
             'model' => 'required',
             'tahun' => 'required',
             'warna' => 'required',
-            'tanggal_jatuh_tempo' => 'required',
-            'bulan_jatuh_tempo' => 'required',
-            'bagian_lokasi' => 'required',
+            'tanggal_jatuh_tempo' => 'nullable',
+            'bulan_jatuh_tempo' => 'nullable',
+            'bagian_lokasi' => 'nullable',
+            'riwayat' => 'nullable',
             //peminjaman
             'nama_peminjaman' => 'nullable',
             'tanggal_peminjaman' => 'nullable',
@@ -198,7 +206,8 @@ class VehicleController extends Controller
             'tanggal_dijual' => 'nullable',
             //foto
             'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:2056',
+            'berkas.*' => 'file|mimes:pdf|max:2056',
+            'nama_berkas' => 'nullable',
         ]);
 
         if($request->file('foto')){
@@ -209,14 +218,21 @@ class VehicleController extends Controller
         }
         if($request->file('berkas')){
             if($vehicle->berkas){
-                Storage::disk('public')->delete($vehicle->berkas);
+                $arr3 = explode(',', $vehicle->berkas);
+                for ($i=0; $i < count($arr3); $i++) { 
+                    Storage::disk('public')->delete($arr3[$i]);
+                }
             }
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-kendaraan', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-kendaraan/'.$validationData['nomor_polisi_bpkb'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
-
         
         $vehicle->update($validationData);
-        return redirect('/vehicle')->with('success', 'Kendaraan telah diubah!');
+        return redirect('/vehicle')->with('success', 'Data kendaraan telah diubah!');
     }
 
     /**
@@ -231,21 +247,39 @@ class VehicleController extends Controller
             Storage::disk('public')->delete($vehicle->foto);
         }
         if($vehicle->berkas){
-            Storage::disk('public')->delete($vehicle->berkas);
+                Storage::disk('public')->delete('berkas-kendaraan/'.$vehicle->nomor_polisi_bpkb);
         }
 
         Vehicle::destroy($vehicle->id);
-        return redirect('/vehicle')->with('success', 'Kendaraan telah dihapus!');
+        return redirect('/vehicle')->with('success', 'Data kendaraan telah dihapus!');
     }
 
-    public function arsip(Request $request, $nomor_bpkb){
+    public function arsip(Request $request, $nomor_polisi_bpkb){
         $arsip = $request->validate([
             'status' => 'required',
         ]);
 
         $arsip = Arr::add($arsip, 'tanggal_dijual', Carbon::now()->toDateString());
 
-        Vehicle::where('nomor_bpkb', $nomor_bpkb)->update($arsip);
-        return redirect('/vehicle')->with('success', 'Kendaraan telah diarsipkan!');
+        Vehicle::where('nomor_polisi_bpkb', $nomor_polisi_bpkb)->update($arsip);
+        return redirect('/vehicle')->with('success', 'Data kendaraan telah diarsipkan!');
+    }
+
+    public function import(Request $request){
+        
+        Excel::import(new VehicleImportC, $request->file('import'));
+                
+        return redirect('/vehicle')->with('success', 'Data kendaraan telah diimport!');
+    }
+
+    public function berkas(Request $request, Vehicle $vehicle){
+        $arr3 = explode(',', $vehicle->berkas);
+        for ($i=0; $i < count($arr3); $i++) { 
+            if($arr3[$i] == $request['berkas']){
+                $path = 'storage/'.$arr3[$i];
+            }
+        }
+        
+        return response()->file($path);
     }
 }

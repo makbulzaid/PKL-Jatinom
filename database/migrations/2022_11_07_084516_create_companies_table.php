@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_company');
             $table->string('slug_company')->unique();
-            $table->string('link');
+            // $table->string('link');
             $table->timestamps();
         });
     }

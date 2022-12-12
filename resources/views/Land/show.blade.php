@@ -46,12 +46,30 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Foto</td>
-                            <td> <img src="{{ asset('storage/' . $lands->foto) }}"></td>
+                            <td style="font-weight:bold; font-size:24px">Informasi Tanah</td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>Berkas (PDF)</td>
-                            <td> <img src="{{ asset('storage/' . $lands->berkas) }}"></td>
+                            <th>Foto</th>
+                            <td> 
+                                @if($lands->foto)
+                                <img src="{{ asset('storage/' . $lands->foto) }}">
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Berkas (PDF)</th>
+                            <td>
+                                @if ($lands->berkas)
+                                @php
+                                $berkas = explode(',', $lands->berkas);
+                                $nama_berkass = explode(',', $lands->nama_berkas);
+                                @endphp
+                                @for ($i=0; $i<count($berkas); $i++)
+                                <a href="/employee/berkas?berkas={{ $berkas[$i] }}" class="badge badge-info mb-2" type="button"><i class="far fa-file-alt"></i><span> {{ $nama_berkass[$i] }}</span></a><br>
+                                @endfor
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Nomor Sertifikat</th>
@@ -59,7 +77,21 @@
                         </tr>
                         <tr>
                             <th>Status</th>
-                            <td>{{ $lands->status }}</td>
+                            <td>
+                                @if($lands->status == 1)
+                                    Sertifikat
+                                    @elseif($lands->status == 2)
+                                    Belum Sertifikat
+                                    @elseif($lands->status == 3)
+                                    Proses
+                                    @elseif($lands->status == 4)
+                                    Petok
+                                    @elseif($lands->status == 5)
+                                    Jaminan
+                                    @elseif($lands->status == 6)
+                                    Arsip
+                                    @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Posisi Sertifikat</th>
@@ -98,6 +130,26 @@
                             <td>{{ $lands->tanggal_pembelian }}</td>
                         </tr>
                         <tr>
+                            <th>Keterangan</th>
+                            <td>{{ $lands->keterangan }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold; font-size:24px">Informasi Penjaminan</td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <th>Penjaminan</th>
                             <td>{{ $lands->penjaminan }}</td>
                         </tr>
@@ -114,8 +166,8 @@
                             <td>{{ $lands->keterangan_penjaminan }}</td>
                         </tr>
                         <tr>
-                            <th>Keterangan</th>
-                            <td>{{ $lands->keterangan }}</td>
+                            <th></th>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Tanggal Dijual</th>

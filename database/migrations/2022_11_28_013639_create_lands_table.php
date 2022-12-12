@@ -18,16 +18,16 @@ return new class extends Migration
             //informasi tanah
             $table->string('nomor_sertifikat');
             $table->integer('status');
-            $table->string('posisi_sertifikat');
-            $table->string('pemilik');
-            $table->string('slug_pemilik');
+            $table->string('posisi_sertifikat')->nullable();
+            $table->string('pemilik')->nullable()->default('TidakBernama');
+            $table->string('slug_pemilik')->nullable();
             $table->string('nomor_sppt')->nullable();
             $table->string('njop')->nullable();
-            $table->string('luas');
-            $table->string('lokasi');
-            $table->text('alamat');
-            $table->string('harga_pembelian');
-            $table->date('tanggal_pembelian');
+            $table->string('luas')->nullable();
+            $table->string('lokasi')->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('harga_pembelian')->nullable();
+            $table->date('tanggal_pembelian')->nullable();
             //penjaminan
             $table->string('penjaminan')->nullable();
             $table->date('tanggal_penjaminan')->nullable();
@@ -39,6 +39,7 @@ return new class extends Migration
             //file
             $table->text('foto')->nullable();
             $table->text('berkas')->nullable();
+            $table->text('nama_berkas')->nullable();
             $table->timestamps();
         });
     }

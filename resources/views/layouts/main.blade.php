@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/assets/node_modules/selectric/public/selectric.css">
     <link rel="stylesheet" href="/assets/node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css">
     <link rel="stylesheet" href="/assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">
+    <link rel="stylesheet" href="/assets/node_modules/prismjs/themes/prism.css">
     
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/css/components.css">
@@ -49,6 +50,7 @@
                     </section>
                 </div>
             </div>
+            @yield('modal')
 
             {{-- footer --}}
             @include('partials.footer')
@@ -72,6 +74,7 @@
             <script src="/assets/node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
             <script src="/assets/node_modules/select2/dist/js/select2.full.min.js"></script>
             <script src="/assets/node_modules/selectric/public/jquery.selectric.min.js"></script>
+            <script src="/assets/node_modules/prismjs/prism.js"></script>
 
             <!-- Template JS File -->
             <script src="/assets/js/scripts.js"></script>
@@ -79,6 +82,7 @@
 
             <!-- Page Specific JS File -->
             <script src="/assets/js/page/forms-advanced-forms.js"></script>
+            <script src="/assets/js/page/bootstrap-modal.js"></script>
             
             @yield('extrajs')
 </body>

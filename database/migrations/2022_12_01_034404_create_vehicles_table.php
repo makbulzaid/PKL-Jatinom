@@ -16,20 +16,20 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             //informasi kendaraan
-            $table->string('nomor_bpkb');
-            $table->integer('status');
             $table->string('nomor_polisi_bpkb');
+            $table->integer('status');
             $table->string('nomor_polisi_lama')->nullable();
-            $table->string('nama_bpkb');
-            $table->string('merk');
-            $table->string('tipe');
-            $table->string('jenis');
-            $table->string('model');
-            $table->string('tahun');
-            $table->string('warna');
-            $table->date('tanggal_jatuh_tempo');
-            $table->string('bulan_jatuh_tempo');
-            $table->string('bagian_lokasi');
+            $table->string('nama_bpkb')->nullable();
+            $table->string('merk')->nullable();
+            $table->string('tipe')->nullable();
+            $table->string('jenis')->nullable();
+            $table->string('model')->nullable();
+            $table->string('tahun')->nullable();
+            $table->string('warna')->nullable();
+            $table->date('tanggal_jatuh_tempo')->nullable();
+            $table->string('bulan_jatuh_tempo')->nullable();
+            $table->string('bagian_lokasi')->nullable();
+            $table->text('riwayat')->nullable();
             //peminjaman
             $table->string('nama_peminjaman')->nullable();
             $table->date('tanggal_peminjaman')->nullable();
@@ -46,6 +46,7 @@ return new class extends Migration
             //file
             $table->text('foto')->nullable();
             $table->text('berkas')->nullable();
+            $table->text('nama_berkas')->nullable();
             $table->timestamps();
         });
     }

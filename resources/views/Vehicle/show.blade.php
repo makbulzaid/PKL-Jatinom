@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title')
-    {{ $vehicles->nomor_bpkb }}
+    {{ $vehicles->nomor_polisi_bpkb }}
 @endsection
 
 @section('extracss')
@@ -11,22 +11,22 @@
 @section('header')
     <h1>Detail Kendaraan</h1>
     <div class="section-header-breadcrumb">
-        <a href="/vehicle/{{ $vehicles->nomor_bpkb }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i
+        <a href="/vehicle/{{ $vehicles->nomor_polisi_bpkb }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i
                 class="fas fa-edit"></i> Edit</a>
         
         @if($vehicles->status == 4)
-        <form action="/vehicle/{{ $vehicles->nomor_bpkb }}" method="post" style="display: inline;">
+        <form action="/vehicle/{{ $vehicles->nomor_polisi_bpkb }}" method="post" style="display: inline;">
             @method('delete')
             @csrf
             <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Menghapus Data Permanen?')"><i class="fas fa-times"></i> Hapus</button>
         </form>  
         @else    
-        <form action="/vehicle/arsip/{{ $vehicles->nomor_bpkb }}" method="post"
+        <form action="/vehicle/arsip/{{ $vehicles->nomor_polisi_bpkb }}" method="post"
             style="display: inline;">
             @method('put')
             @csrf
             <input type="hidden" value="4" name="status" id="status">
-            <input type="hidden" value="{{ $vehicles->nomor_bpkb }}" name="nomor_bpkb" id="nomor_bpkb">
+            <input type="hidden" value="{{ $vehicles->nomor_polisi_bpkb }}" name="nomor_polisi_bpkb" id="nomor_polisi_bpkb">
             <button class="btn btn-lg icon-left btn-danger" onclick="return confirm('Memindahkan Data ke Arsip?')"><i class="fas fa-times"></i> Hapus</button>
         </form>
         @endif
@@ -46,20 +46,48 @@
                     </thead>
                     <tbody>
                         <tr>
+                            <td style="font-weight:bold; font-size:24px">Informasi Kendaraan</td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <th>Foto</th>
-                            <td> <img src="{{ asset('storage/' . $vehicles->foto) }}"></td>
+                            <td> 
+                                @if($vehicles->foto)
+                                <img src="{{ asset('storage/' . $vehicles->foto) }}">
+                                @endif
+                            </td>
                         </tr>
                         <tr>
-                            <th>Berkas</th>
-                            <td> <img src="{{ asset('storage/' . $vehicles->berkas) }}"></td>
-                        </tr>
-                        <tr>
-                            <th>Nomor BPKB</th>
-                            <td>{{ $vehicles->nomor_bpkb }}</td>
+                            <th>Berkas (PDF)</th>
+                            <td>
+                                @if ($vehicles->berkas)
+                                @php
+                                $berkas = explode(',', $vehicles->berkas);
+                                $nama_berkass = explode(',', $vehicles->nama_berkas);
+                                @endphp
+                                @for ($i=0; $i<count($berkas); $i++)
+                                <a href="/employee/berkas?berkas={{ $berkas[$i] }}" class="badge badge-info mb-2" type="button"><i class="far fa-file-alt"></i><span> {{ $nama_berkass[$i] }}</span></a><br>
+                                @endfor
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Nomor Polisi BPKB</th>
                             <td>{{ $vehicles->nomor_polisi_bpkb }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                @if($vehicles->status == 1)
+                                Aset
+                                @elseif($vehicles->status == 2)
+                                Peminjaman
+                                @elseif($vehicles->status == 3)
+                                Penitipan
+                                @elseif($vehicles->status == 4)
+                                Arsip
+                                @endif
+                            </td>
                         </tr>
                         <tr>
                             <th>Nomor Polisi Lama</th>
@@ -106,6 +134,31 @@
                             <td>{{ $vehicles->bagian_lokasi }}</td>
                         </tr>
                         <tr>
+                            <th>Riwayat</th>
+                            <td>
+                                @foreach (explode(',', $vehicles->riwayat) as $riwayat)
+                                {{ $riwayat }}
+                                <br>
+                                @endforeach
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold; font-size:24px">Informasi Peminjaman</td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <th>Nama Peminjaman</th>
                             <td>{{ $vehicles->nama_peminjaman }}</td>
                         </tr>
@@ -122,6 +175,22 @@
                             <td>{{ $vehicles->keterangan_peminjaman }}</td>
                         </tr>
                         <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:bold; font-size:24px">Informasi Penitipan</td>
+                            <td></td>
+                        </tr>
+                        <tr>
                             <th>Nama Penitipan</th>
                             <td>{{ $vehicles->nama_penitipan }}</td>
                         </tr>
@@ -136,6 +205,10 @@
                         <tr>
                             <th>Keterangan Penitipan</th>
                             <td>{{ $vehicles->keterangan_penitipan }}</td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Keterangan</th>

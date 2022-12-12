@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Imports\EmployeeImportC;
 use App\Models\Company;
 use App\Models\Land;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -79,7 +81,8 @@ class EmployeeController extends Controller
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
             'status' => 'required',
-            'jumlah_anak' => 'required',
+            'anak_laki' => 'required',
+            'anak_perempuan' => 'required',
             'nama_ibu' => 'required',
             'pendidikan' => 'required',
             'golongan_darah' => 'required',
@@ -106,21 +109,27 @@ class EmployeeController extends Controller
             'keterangan' => 'nullable',
             //keluar
             'tanggal_keluar' => 'nullable',
+            'alasan_keluar' => 'nullable',
             //foto
-            'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:5120',
+            'foto' => 'image|file|max:2056|nullable',
+            'berkas.*' => 'file|mimes:pdf|max:5120',
+            'nama_berkas' => 'nullable',
         ]);
 
         if($request->file('foto')){
             $validationData['foto'] = $request->file('foto')->store('foto-karyawan', 'public');
         }
         if($request->file('berkas')){
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-karyawan', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-karyawan/'.$validationData['nomor_induk'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
-
         
         $request = Employee::create($validationData)->companies()->sync((array)$request->input('company_id'));
-        return redirect('/employee')->with('success', 'Karyawan telah ditambahkan!');
+        return redirect('/employee')->with('success', 'Data karyawan telah ditambahkan!');
     }
 
     /**
@@ -178,7 +187,8 @@ class EmployeeController extends Controller
             'tanggal_lahir' => 'required',
             'alamat' => 'required',
             'status' => 'required',
-            'jumlah_anak' => 'required',
+            'anak_laki' => 'required',
+            'anak_perempuan' => 'required',
             'nama_ibu' => 'required',
             'pendidikan' => 'required',
             'golongan_darah' => 'required',
@@ -205,11 +215,13 @@ class EmployeeController extends Controller
             'keterangan' => 'nullable',
             //keluar
             'tanggal_keluar' => 'nullable',
+            'alasan_keluar' => 'nullable',
             //foto
-            'foto' => 'image|file|max:2056',
-            'berkas' => 'file|mimes:pdf|max:5120',
+            'foto' => 'image|file|max:2056|nullable',
+            'berkas.*' => 'file|mimes:pdf|max:5120',
+            'nama_berkas' => 'nullable',
         ]);
-        
+
         if($request->file('foto')){
             if($employee->foto){
                 Storage::disk('public')->delete($employee->foto);
@@ -218,16 +230,24 @@ class EmployeeController extends Controller
         }
         if($request->file('berkas')){
             if($employee->berkas){
-                Storage::disk('public')->delete($employee->berkas);
+                $arr3 = explode(',', $employee->berkas);
+                for ($i=0; $i < count($arr3); $i++) { 
+                    Storage::disk('public')->delete($arr3[$i]);
+                }
             }
-            $validationData['berkas'] = $request->file('berkas')->store('berkas-karyawan', 'public');
+            foreach($request->file('berkas') as $berkas){
+                $arr[] = $berkas->store('berkas-karyawan/'.$validationData['nomor_induk'], 'public');
+                $arr2[] = pathinfo($berkas->getClientOriginalName(), PATHINFO_FILENAME);
+            }
+            $validationData['berkas'] = implode(",", $arr);
+            $validationData['nama_berkas'] = implode(",", $arr2);
         }
 
         
         $employee->update($validationData);
         $employee->companies()->sync((array)$request->input('company_id'));
 
-        return redirect('/employee')->with('success', 'Karyawan telah diedit!');
+        return redirect('/employee')->with('success', 'Data karyawan telah diubah!');
     }
 
     /**
@@ -241,9 +261,13 @@ class EmployeeController extends Controller
         if($employee->foto){
             Storage::disk('public')->delete($employee->foto);
         }
+        if($employee->berkas){
+            Storage::disk('public')->deleteDirectory('berkas-karyawan/'.$employee->nomor_induk);
+        }
+        // dd($arr3);
         
         Employee::destroy($employee->id);
-        return redirect('/employee')->with('success', 'Karyawan telah dihapus!');
+        return redirect('/employee')->with('success', 'Data karyawan telah dihapus!');
     }
 
     public function keluar(Request $request, $nomor_induk){
@@ -254,6 +278,19 @@ class EmployeeController extends Controller
         $keluar = Arr::add($keluar, 'tanggal_keluar', Carbon::now()->toDateString());
 
         Employee::where('nomor_induk', $nomor_induk)->update($keluar);
-        return redirect('/employee')->with('success', 'Karyawan telah diarsipkan!');
+        return redirect('/employee')->with('success', 'Data karyawan telah diarsipkan!');
+    }
+
+    public function import(Request $request){
+        
+        Excel::import(new EmployeeImportC, $request->file('import'));
+                
+        return redirect('/employee')->with('success', 'Data karyawan telah diimport!');
+    }
+    
+    public function berkas(Request $request){
+        $path = 'storage/'.$request['berkas'];
+
+        return response()->file($path);
     }
 }

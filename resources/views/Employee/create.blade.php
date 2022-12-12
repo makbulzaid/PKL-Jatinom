@@ -50,8 +50,11 @@
                                         <option value="Janda/Duda" @if(old('Janda/Duda') == 'O') selected @endif>Janda/Duda</option>
                                     </select>
                                     
-                                    <label class="mt-2" for="jumlah_anak">Jumlah Anak</label>
-                                    <input name="jumlah_anak" id="jumlah_anak" type="text" class="form-control" value="{{ old('jumlah_anak') }}" required autofocus>
+                                    <label class="mt-2" for="anak_laki">Anak Laki-Laki</label>
+                                    <input name="anak_laki" id="anak_laki" type="text" class="form-control" value="{{ old('anak_laki') }}" required autofocus>
+
+                                    <label class="mt-2" for="anak_perempuan">Anak Perempuan</label>
+                                    <input name="anak_perempuan" id="anak_perempuan" type="text" class="form-control" value="{{ old('anak_perempuan') }}" required autofocus>
                                     
                                     <label class="mt-2" for="nama_ibu">Nama Ibu</label>
                                     <input name="nama_ibu" id="nama_ibu" type="text" class="form-control" value="{{ old('nama_ibu') }}" required autofocus>
@@ -160,12 +163,16 @@
                                     <label class="mt-2" for="tanggal_keluar">Tanggal Keluar</label>
                                     <input name="tanggal_keluar" id="tanggal_keluar" type="date" class="form-control" value="{{ old('tanggal_keluar') }}">
 
+                                    <label class="mt-2" for="alasan_keluar">Alasan Keluar</label>
+                                    <input name="alasan_keluar" id="alasan_keluar" type="text" class="form-control" value="{{ old('alasan_keluar') }}">
+
                                     <label class="mt-2" for="foto">Foto</label>
                                     <img class="img-preview img-fluid mb-2 p-0 col-sm-3">                                  
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
                                     
-                                    <label class="mt-2" for="berkas">Berkas</label>                                  
-                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
+                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>
+                                    <div class="outputt" style="display: none"></div>                                  
+                                    <input name="berkas[]" id="berkas" type="file" class="form-control" onchange="previewPdf()" style="padding: 7px 15px" autofocus multiple>
                                 </div>
                             </div>
                         </div>
@@ -189,6 +196,16 @@
         oFReader.readAsDataURL(foto.files[0]);
         oFReader.onload = function(oFREvent) {
             imgPreview.src = oFREvent.target.result;
+        }
+    }
+    function previewPdf(){
+        const fileInput = document.querySelector("#berkas");
+        const divv = document.querySelector('.outputt');
+
+        divv.style.display = 'block';
+        $(".outputt").empty();
+        for (const file of fileInput.files) {
+            $(".outputt").append("<a href='#' class='badge badge-success mb-2' type='button'>"+file.name+"<a><br>");
         }
     }
 </script>

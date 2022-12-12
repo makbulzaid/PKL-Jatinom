@@ -68,8 +68,11 @@
                                         <option value="Janda/Duda" @if(old('Janda/Duda', $employees->status) == 'Janda/Duda') selected @endif>Janda/Duda</option>
                                     </select>
 
-                                    <label class="mt-2" for="jumlah_anak">Jumlah Anak</label>
-                                    <input name="jumlah_anak" id="jumlah_anak" type="text" class="form-control" value="{{ old('jumlah_anak', $employees->jumlah_anak) }}" required autofocus>
+                                    <label class="mt-2" for="anak_laki">Anak Laki-Laki</label>
+                                    <input name="anak_laki" id="anak_laki" type="text" class="form-control" value="{{ old('anak_laki', $employees->anak_laki) }}" required autofocus>
+                                    
+                                    <label class="mt-2" for="anak_perempuan">Anak Perempuan</label>
+                                    <input name="anak_perempuan" id="anak_perempuan" type="text" class="form-control" value="{{ old('anak_perempuan', $employees->anak_perempuan) }}" required autofocus>
                                     
                                     <label class="mt-2" for="nama_nama_ibu">Nama Ibu</label>
                                     <input name="nama_ibu" id="nama_ibu" type="text" class="form-control" value="{{ old('nama_ibu', $employees->nama_ibu) }}" required autofocus>
@@ -179,10 +182,13 @@
                                     <input name="riwayat_pelanggaran" id="riwayat_pelanggaran" type="text" class="form-control inputtags" data-role="tagsinput" value="{{ old('riwayat_pelanggaran', $employees->riwayat_pelanggaran) }}">
                                     
                                     <label class="mt-2" for="keterangan">Keterangan</label>
-                                    <input name="keterangan" id="keterangan" type="text" class="form-control" value="{{ old('keterangan', $employees->keterangan) }}">
+                                    <textarea name="keterangan" id="keterangan" type="text" class="form-control" style="height: 150px">{{ old('keterangan', $employees->keterangan) }}</textarea>
                                     
                                     <label class="mt-2" for="tanggal_keluar">Tanggal Keluar</label>
                                     <input name="tanggal_keluar" id="tanggal_keluar" type="date" class="form-control" value="{{ old('tanggal_keluar', $employees->tanggal_keluar) }}">
+                                    
+                                    <label class="mt-2" for="alasan_keluar">Alasan Keluar</label>
+                                    <input name="alasan_keluar" id="alasan_keluar" type="text" class="form-control" value="{{ old('alasan_keluar', $employees->alasan_keluar) }}">
 
                                     <label class="mt-2" for="foto">Foto</label>
                                     @if ($employees->foto)
@@ -192,13 +198,20 @@
                                     @endif                                    
                                     <input name="foto" id="foto" type="file" class="form-control" onchange="previewImage()" style="padding: 7px 15px" autofocus>
                                     
-                                    <label class="mt-2" for="berkas">Berkas</label>
-                                    @if ($employees->berkas)
-                                    {{-- <img src="{{ asset('storage/' . $employees->berkas) }}" class="img-preview img-fluid mb-2 p-0 col-sm-3 d-block"> --}}
-                                    @else
-                                    {{-- <img class="img-preview img-fluid mb-2 p-0 col-sm-3"> --}}
-                                    @endif                                    
-                                    <input name="berkas" id="berkas" type="file" class="form-control" style="padding: 7px 15px" autofocus>
+                                    <label class="mt-2" for="berkas">Berkas (PDF)</label>
+                                    <div class="output">
+                                        @if ($employees->berkas)
+                                        @php
+                                        $berkas = explode(',', $employees->berkas);
+                                        $nama_berkass = explode(',', $employees->nama_berkas);
+                                        @endphp
+                                        @for ($i=0; $i<count($berkas); $i++)
+                                        <a href="/employee/berkas?berkas={{ $berkas[$i] }}" class="badge badge-info mb-2" type="button"><i class="far fa-file-alt"></i><span> {{ $nama_berkass[$i] }}</span></a><br>
+                                        @endfor
+                                        @endif                                    
+                                    </div>
+                                    <div class="outputt" style="display: none"></div>
+                                    <input name="berkas[]" id="berkas" type="file" class="form-control" onchange="previewPdf()" style="padding: 7px 15px" autofocus multiple>
                                 </div>
                             </div>
                         </div>
@@ -222,6 +235,20 @@
         oFReader.readAsDataURL(foto.files[0]);
         oFReader.onload = function(oFREvent) {
             imgPreview.src = oFREvent.target.result;
+        }
+    }
+
+    function previewPdf(){
+        const fileInput = document.querySelector("#berkas");
+        const div = document.querySelector('.output');
+        const divv = document.querySelector('.outputt');
+
+        div.style.display = 'none';
+        divv.style.display = 'block';
+
+        $(".outputt").empty();
+        for (const file of fileInput.files) {
+            $(".outputt").append("<a href='#' class='badge badge-success mb-2' type='button'>"+file.name+"<a><br>");
         }
     }
 </script>
