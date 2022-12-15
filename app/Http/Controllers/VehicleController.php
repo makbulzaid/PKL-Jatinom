@@ -11,6 +11,7 @@ use App\Imports\VehicleImportC;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -62,6 +63,9 @@ class VehicleController extends Controller
      */
     public function create()
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         return view ('vehicle.create', [
             'vehicles' => Vehicle::all(),
             'header' => 'Tambah Kendaraan',
@@ -80,6 +84,9 @@ class VehicleController extends Controller
      */
     public function store(StoreVehicleRequest $request)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             'nomor_polisi_bpkb' => 'required',
             'status' => 'required',
@@ -157,6 +164,9 @@ class VehicleController extends Controller
      */
     public function edit(Vehicle $vehicle)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         return view ('vehicle.edit', [
             'vehicles' => $vehicle,
             'header' => $vehicle->nomor_polisi_bpkb,
@@ -176,6 +186,9 @@ class VehicleController extends Controller
      */
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             'nomor_polisi_bpkb' => 'required',
             'status' => 'required',
@@ -243,6 +256,9 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         if($vehicle->foto){
             Storage::disk('public')->delete($vehicle->foto);
         }
@@ -254,7 +270,11 @@ class VehicleController extends Controller
         return redirect('/vehicle')->with('success', 'Data kendaraan telah dihapus!');
     }
 
-    public function arsip(Request $request, $nomor_polisi_bpkb){
+    public function arsip(Request $request, $nomor_polisi_bpkb)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $arsip = $request->validate([
             'status' => 'required',
         ]);
@@ -265,14 +285,22 @@ class VehicleController extends Controller
         return redirect('/vehicle')->with('success', 'Data kendaraan telah diarsipkan!');
     }
 
-    public function import(Request $request){
+    public function import(Request $request)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         
         Excel::import(new VehicleImportC, $request->file('import'));
                 
         return redirect('/vehicle')->with('success', 'Data kendaraan telah diimport!');
     }
 
-    public function berkas(Request $request, Vehicle $vehicle){
+    public function berkas(Request $request, Vehicle $vehicle)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $arr3 = explode(',', $vehicle->berkas);
         for ($i=0; $i < count($arr3); $i++) { 
             if($arr3[$i] == $request['berkas']){

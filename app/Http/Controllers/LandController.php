@@ -11,6 +11,7 @@ use App\Imports\LandImportC;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -56,7 +57,10 @@ class LandController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {   
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }   
         return view ('land.create', [
             'companies' => Company::all(),
             'header' => 'Tambah Tanah',
@@ -76,6 +80,9 @@ class LandController extends Controller
      */
     public function store(StoreLandRequest $request)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             //informasi tanah
             'nomor_sertifikat' => 'required',
@@ -147,6 +154,9 @@ class LandController extends Controller
      */
     public function edit(Land $land)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         return view('land.edit', [
             'lands' => $land,
             'header' => $land->nomor_sertifikat,
@@ -166,6 +176,9 @@ class LandController extends Controller
      */
     public function update(UpdateLandRequest $request, Land $land)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             //informasi tanah
             'nomor_sertifikat' => 'required',
@@ -228,6 +241,9 @@ class LandController extends Controller
      */
     public function destroy(Land $land)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         if($land->foto){
             Storage::disk('public')->delete($land->foto);
         }
@@ -239,7 +255,11 @@ class LandController extends Controller
         return redirect('/land')->with('success', 'Tanah telah dihapus!');
     }
 
-    public function arsip(Request $request, $nomor_sertifikat){
+    public function arsip(Request $request, $nomor_sertifikat)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $arsip = $request->validate([
             'status' => 'required',
         ]);
@@ -250,14 +270,22 @@ class LandController extends Controller
         return redirect('/land')->with('success', 'Data tanah telah diarsipkan!');
     }
 
-    public function import(Request $request){
+    public function import(Request $request)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         
         Excel::import(new LandImportC, $request->file('import'));
                 
         return redirect('/land')->with('success', 'Data Tanah telah diimport!');
     }
 
-    public function berkas(Request $request, Land $land){
+    public function berkas(Request $request, Land $land)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $arr3 = explode(',', $land->berkas);
         for ($i=0; $i < count($arr3); $i++) { 
             if($arr3[$i] == $request['berkas']){

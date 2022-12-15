@@ -11,10 +11,12 @@
 
 @section('header')
     <h1>{{ $header }}</h1>
+    @can('admin')
     <div class="section-header-breadcrumb">
         <a href="/vehicle/create" class="btn btn-lg icon-left btn-primary"><i class="fas fa-edit"></i> Tambah</a>
         <button class="btn btn-success btn-lg icon-lect ml-2" data-toggle="modal" data-target="#Modal"><i class="fas fa-edit"></i> Import</button>
     </div>
+    @endcan
 @endsection
 
 @section('success')
@@ -57,7 +59,9 @@
                             <th>Keterangan Penitipan</th>
                             <th>Keterangan</th>
                             <th>Tanggal Dijual</th>
+                            @can('admin') 
                             <th>Action</th>
+                            @endcan
                         </tr>
                     </thead>
                     <tbody>
@@ -103,6 +107,7 @@
                                 <td>{{ $vehicle->keterangan_penitipan }}</td>
                                 <td>{{ $vehicle->keterangan }}</td>
                                 <td>{{ $vehicle->tanggal_dijual }}</td>
+                                @can('admin') 
                                 <td>
                                     {{-- <a href="/vehicle/{{ $vehicle->nomor_polisi_bpkb }}"
                                         class="btn btn-icon icon-left btn-info"><i class="fas fa-info-circle"></i>
@@ -126,6 +131,7 @@
                                     </form>
                                     @endif
                                 </td>
+                                @endcan
                             </tr>   
                         @endforeach
                     </tbody>

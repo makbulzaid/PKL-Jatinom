@@ -11,6 +11,7 @@ use App\Models\Land;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -56,6 +57,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         return view('employee.create', [
             'employees' => Employee::all(),
             'header' => "Jatinom Indah Grup",
@@ -74,6 +78,9 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             'nama' => 'required',
             'jenis_kelamin' => 'required',
@@ -161,6 +168,9 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         return view('employee.edit', [
             'employees' => $employee,
             'header' => $employee->nama,
@@ -180,6 +190,9 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $validationData = $request->validate([
             'nama' => 'required',
             'jenis_kelamin' => 'required',
@@ -258,6 +271,9 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         if($employee->foto){
             Storage::disk('public')->delete($employee->foto);
         }
@@ -270,7 +286,11 @@ class EmployeeController extends Controller
         return redirect('/employee')->with('success', 'Data karyawan telah dihapus!');
     }
 
-    public function keluar(Request $request, $nomor_induk){
+    public function keluar(Request $request, $nomor_induk)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $keluar = $request->validate([
             'keluar' => 'required',
         ]);
@@ -281,14 +301,22 @@ class EmployeeController extends Controller
         return redirect('/employee')->with('success', 'Data karyawan telah diarsipkan!');
     }
 
-    public function import(Request $request){
+    public function import(Request $request)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         
         Excel::import(new EmployeeImportC, $request->file('import'));
                 
         return redirect('/employee')->with('success', 'Data karyawan telah diimport!');
     }
     
-    public function berkas(Request $request){
+    public function berkas(Request $request)
+    {
+        if(! Gate::allows('admin')){
+            abort(403);
+        }
         $path = 'storage/'.$request['berkas'];
 
         return response()->file($path);

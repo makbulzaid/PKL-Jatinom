@@ -9,7 +9,8 @@
 @endsection
 
 @section('header')
-    <h1>Detail Tanah</h1>
+    <h1>{{ $header }}</h1>
+    @can('admin') 
     <div class="section-header-breadcrumb">
         <a href="/land/{{ $lands->nomor_sertifikat }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i
                 class="fas fa-edit"></i> Edit</a>
@@ -31,6 +32,7 @@
         </form>
         @endif
     </div>
+    @endcan
 @endsection
 
 @section('container')

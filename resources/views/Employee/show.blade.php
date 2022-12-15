@@ -10,6 +10,7 @@
 
     @section('header')
         <h1>{{ $header }}</h1>
+        @can('admin')
         <div class="section-header-breadcrumb">
             <a href="/employee/{{ $employees->nomor_induk }}/edit" class="btn btn-lg icon-left btn-primary mr-2"><i class="fas fa-edit"></i> Edit</a>
             
@@ -30,6 +31,7 @@
             </form>
             @endif
         </div>
+        @endcan
     @endsection
 
     @section('container')
